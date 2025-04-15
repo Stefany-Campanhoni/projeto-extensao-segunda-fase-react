@@ -1,11 +1,15 @@
+import React from "react"
 import "./table.css"
 
-export type Column = {
+export type Column<T = any> = {
+  key: string
   label: string
+  accessor?: (row: T) => React.ReactNode
+  className?: string
 }
 
 type TableProps<T> = {
-  columns: Column[]
+  columns: Column<T>[]
   rowsData: T[]
   classNamed?: string
   emptyText?: string
@@ -13,13 +17,13 @@ type TableProps<T> = {
 
 export function Table<T>({ columns, rowsData, classNamed, emptyText = "" }: TableProps<T>) {
   return (
-    <table className={`table-container ${classNamed}`}>
+    <table className={`table-container ${classNamed || ""}`}>
       <thead className="table-header">
         <tr>
-          {columns.map((column, index) => (
+          {columns.map((column) => (
             <th
-              key={index}
-              className="table-header-cell"
+              key={column.key}
+              className={`table-header-cell ${column.className || ""}`}
             >
               {column.label}
             </th>
@@ -42,12 +46,14 @@ export function Table<T>({ columns, rowsData, classNamed, emptyText = "" }: Tabl
               key={rowIndex}
               className="table-row"
             >
-              {columns.map((column, columnIndex) => (
+              {columns.map((column) => (
                 <td
-                  key={columnIndex}
-                  className="table-cell"
+                  key={`${rowIndex}-${column.key}`}
+                  className={`table-cell ${column.className || ""}`}
                 >
-                  {row[column.label as keyof typeof row] as string}
+                  {column.accessor
+                    ? column.accessor(row)
+                    : (row[column.key as keyof typeof row] as React.ReactNode)}
                 </td>
               ))}
             </tr>

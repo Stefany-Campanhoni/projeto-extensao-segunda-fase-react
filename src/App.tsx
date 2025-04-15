@@ -1,4 +1,4 @@
-import { Dashbord } from "@pages/Dashbord"
+import { Dashbord } from "@pages/dashboard/Dashbord"
 import "./App.css"
 
 function App() {
