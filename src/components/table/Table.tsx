@@ -4,14 +4,14 @@ export type Column = {
   label: string
 }
 
-type TableProps = {
+type TableProps<T> = {
   columns: Column[]
-  rowsData: any[]
+  rowsData: T[]
   classNamed?: string
   emptyText?: string
 }
 
-export function Table({ columns, rowsData, classNamed, emptyText = "" }: TableProps) {
+export function Table<T>({ columns, rowsData, classNamed, emptyText = "" }: TableProps<T>) {
   return (
     <table className={`table-container ${classNamed}`}>
       <thead className="table-header">
@@ -47,7 +47,7 @@ export function Table({ columns, rowsData, classNamed, emptyText = "" }: TablePr
                   key={columnIndex}
                   className="table-cell"
                 >
-                  {row[column.label]}
+                  {row[column.label as keyof typeof row] as string}
                 </td>
               ))}
             </tr>
