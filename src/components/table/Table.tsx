@@ -1,12 +1,6 @@
 import React from "react"
+import { Column } from "@custom-types/index"
 import "./table.css"
-
-export type Column<T = any> = {
-  key: string
-  label: string
-  accessor?: (row: T) => React.ReactNode
-  className?: string
-}
 
 type TableProps<T> = {
   columns: Column<T>[]
