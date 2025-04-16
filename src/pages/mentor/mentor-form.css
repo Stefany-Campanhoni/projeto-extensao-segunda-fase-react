@@ -1,0 +1,35 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.form > label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: 14px;
+    gap: 10px;
+    color: #333;
+}
+
+.form > label > input,
+.form > label > textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+select {
+  appearance: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #fff;
+}

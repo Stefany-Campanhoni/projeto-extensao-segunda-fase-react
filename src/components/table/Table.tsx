@@ -1,5 +1,5 @@
 import React from "react"
-import { Column } from "@custom-types/index"
+import { Column } from "@custom-types/types"
 import "./table.css"
 
 type TableProps<T> = {

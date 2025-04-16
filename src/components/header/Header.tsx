@@ -1,14 +1,14 @@
 import logo from "@assets/logo.png"
 import "./header.css"
 
-export function Header() {
+export function Header({ title }: { title: string }) {
   return (
     <header className="topbar">
       <img
         src={logo}
         alt="logo.png"
       />
-      <h1>Gerenciamento de perfis de mentores</h1>
+      <h1>{title}</h1>
     </header>
   )
 }

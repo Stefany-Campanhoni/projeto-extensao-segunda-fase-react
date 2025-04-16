@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
-import { Mentor, Column } from "@custom-types/index"
+import { Mentor, Column } from "@custom-types/types"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
 import { Button } from "@components/button/Button"
@@ -62,7 +62,7 @@ export function Dashbord() {
   }, [])
 
   return (
-    <Page>
+    <Page title="Gerenciamento de Perfis de Mentores">
       <section className="dashboard-top">
         <h2>Mentores Cadastrados</h2>
         <Button
