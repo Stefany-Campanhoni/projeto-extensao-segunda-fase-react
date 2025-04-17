@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
-import { Mentor, Column } from "@custom-types/types"
+import { Button } from "@components/button/Button"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
-import { Button } from "@components/button/Button"
+import { Column, Mentor } from "@custom-types/types"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import "./dashboard.css"
 
 export function Dashbord() {

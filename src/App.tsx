@@ -1,6 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { Dashbord } from "@pages/dashboard/Dashbord"
 import { MentorForm } from "@pages/mentor/MentorForm"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import "./App.css"
 
 function App() {
