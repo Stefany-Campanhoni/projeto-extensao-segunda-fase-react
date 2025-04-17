@@ -1,4 +1,4 @@
-import { Dashbord } from "@pages/dashboard/Dashbord"
+import { Dashboard } from "@pages/dashboard/Dashboard"
 import { MentorForm } from "@pages/mentor/MentorForm"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import "./App.css"
@@ -19,7 +19,7 @@ function App() {
 
         <Route
           path="/dashboard"
-          element={<Dashbord />}
+          element={<Dashboard />}
         />
 
         <Route

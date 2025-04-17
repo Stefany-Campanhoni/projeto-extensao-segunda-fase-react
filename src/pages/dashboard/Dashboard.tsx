@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./dashboard.css"
 
-export function Dashbord() {
+export function Dashboard() {
   const navigate = useNavigate()
   const [mentors, setMentors] = useState<Mentor[]>([])
 
