@@ -1,11 +1,11 @@
 type City = {
-  id: number 
+  id: number
   name: string
   state: string
 }
 
 type Specialty = {
-  id: number 
+  id: number
   name: string
   type: string
 }
@@ -17,4 +17,9 @@ export type Mentor = {
   email: string
   city: City
   specialty: Specialty
+}
+
+export type MentorPayload = Omit<Mentor, "city" | "specialty"> & {
+  cityId: number
+  specialtyId: number
 }

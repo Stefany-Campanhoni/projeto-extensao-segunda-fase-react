@@ -1,6 +1,8 @@
+import { create } from "@api/mentor.api"
 import { Button } from "@components/button/Button"
 import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
+import { MentorPayload } from "@custom-types/mentor.types"
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -49,11 +51,7 @@ const mentorFormSchema = z.object({
     }),
 })
 
-type ValidationSchemaType = z.infer<typeof mentorFormSchema>
-
-function onSubmit(data: ValidationSchemaType) {
-  console.log(data)
-}
+export type MentorFormData = z.infer<typeof mentorFormSchema>
 
 export function MentorForm() {
   const navigate = useNavigate()
@@ -61,9 +59,19 @@ export function MentorForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ValidationSchemaType>({
+  } = useForm<MentorFormData>({
     resolver: zodResolver(mentorFormSchema),
   })
+
+  async function onSubmit(data: MentorFormData) {
+    try {
+      const { specialtyTypeId, ...mentorData } = data
+      await create(mentorData as MentorPayload)
+      navigate("/")
+    } catch (error) {
+      console.error("Error creating mentor:", error)
+    }
+  }
 
   return (
     <Page title="Cadastrar Mentor">
@@ -188,7 +196,6 @@ export function MentorForm() {
             type="submit"
             variant="save"
             icon={faFloppyDisk}
-            onClick={() => console.log("oie :3")}
           >
             Salvar
           </Button>

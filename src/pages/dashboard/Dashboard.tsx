@@ -1,3 +1,4 @@
+import { getAll } from "@api/mentor.api"
 import { Button } from "@components/button/Button"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
@@ -50,15 +51,14 @@ export function Dashboard() {
     },
   ]
 
-  useEffect((): void => {
-    fetch("http://localhost:8080/mentors")
-      .then((response) => response.json())
-      .then((data: Mentor[]) => {
-        setMentors(data)
-      })
-      .catch((erro) => {
-        console.error("Erro ao buscar mentores:", erro)
-      })
+  useEffect(() => {
+    ;(async () => {
+      try {
+        setMentors(await getAll())
+      } catch (err) {
+        console.error("Error while fetching mentors", err)
+      }
+    })()
   }, [])
 
   return (
