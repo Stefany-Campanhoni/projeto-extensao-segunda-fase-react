@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import "./button.css"
 
 type ButtonProps = {
-  children: React.ReactNode
+  children?: React.ReactNode
   variant?: "primary" | "edit" | "save" | "danger"
   icon?: IconDefinition | null
   iconWidth?: number

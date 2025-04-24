@@ -24,14 +24,14 @@
 }
 
 .button--edit {
-  background-color: #ecb62d;
+  background-color: #007bff;
   width: 130px;
   justify-content: center;
   gap: 8px;
 }
 
 .button--edit:hover {
-  background-color: #bba97c;
+  background-color: #1962b1;
 }
 
 .button--save {

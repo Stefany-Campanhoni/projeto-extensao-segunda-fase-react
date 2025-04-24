@@ -44,9 +44,7 @@ export function Dashboard() {
         <Button
           variant="edit"
           onClick={() => navigate(`/mentors/${mentor.id}/edit`)}
-        >
-          Editar
-        </Button>
+        />
       ),
     },
   ]
