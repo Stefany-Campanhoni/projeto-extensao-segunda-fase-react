@@ -5,18 +5,13 @@
 }
 
 .action-buttons {
-  width: 35PX;
+  width: 35px;
   height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: inline-block;
   border-radius: 100%;
+  margin: 0 3px;
 }
 
 .actions-cell {
-  height: 51.5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
+  min-width: 85px;
 }

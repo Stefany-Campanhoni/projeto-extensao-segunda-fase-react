@@ -1,13 +1,13 @@
 import { getAll } from "@api/mentor.api"
 import { Button } from "@components/button/Button"
+import { Modal } from "@components/modal/Modal"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
 import { Column, Mentor } from "@custom-types/types"
-import { faPlus, faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./dashboard.css"
-import { Modal } from "@components/modal/Modal"
 
 export function Dashboard() {
   const navigate = useNavigate()
@@ -92,7 +92,7 @@ export function Dashboard() {
         />
       </Page>
 
-      {isModalOpen && (<Modal />)}
+      {isModalOpen && <Modal />}
     </>
   )
 }
