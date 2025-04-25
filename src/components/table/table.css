@@ -1,5 +1,6 @@
 .table-container {
   width: 100%;
+  display: table;
   border-collapse: collapse;
   font-size: 14px;
   text-align: center;

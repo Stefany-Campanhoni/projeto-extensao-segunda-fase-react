@@ -3,14 +3,16 @@ import { Button } from "@components/button/Button"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
 import { Column, Mentor } from "@custom-types/types"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faPlus, faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./dashboard.css"
+import { Modal } from "@components/modal/Modal"
 
 export function Dashboard() {
   const navigate = useNavigate()
   const [mentors, setMentors] = useState<Mentor[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const columns: Column<Mentor>[] = [
     { key: "id", label: "Código" },
@@ -40,11 +42,23 @@ export function Dashboard() {
     {
       key: "actions",
       label: "Ações",
+      className: "actions-cell",
       accessor: (mentor) => (
-        <Button
-          variant="edit"
-          onClick={() => navigate(`/mentors/${mentor.id}/edit`)}
-        />
+        <>
+          <Button
+            variant="edit"
+            icon={faPen}
+            iconColor="white"
+            onClick={() => navigate(`/mentors/${mentor.id}/edit`)}
+            className="action-buttons"
+          />
+          <Button
+            variant="danger"
+            icon={faTrash}
+            className="action-buttons"
+            onClick={() => setIsModalOpen(!isModalOpen)}
+          />
+        </>
       ),
     },
   ]
@@ -60,21 +74,25 @@ export function Dashboard() {
   }, [])
 
   return (
-    <Page title="Gerenciamento de Perfis de Mentores">
-      <section className="dashboard-top">
-        <h2>Mentores Cadastrados</h2>
-        <Button
-          variant="primary"
-          icon={faPlus}
-          onClick={() => navigate("/mentors/create")}
-        >
-          Adicionar
-        </Button>
-      </section>
-      <Table
-        columns={columns}
-        rowsData={mentors}
-      />
-    </Page>
+    <>
+      <Page title="Gerenciamento de Perfis de Mentores">
+        <section className="dashboard-top">
+          <h2>Mentores Cadastrados</h2>
+          <Button
+            variant="primary"
+            icon={faPlus}
+            onClick={() => navigate("/mentors/create")}
+          >
+            Adicionar
+          </Button>
+        </section>
+        <Table
+          columns={columns}
+          rowsData={mentors}
+        />
+      </Page>
+
+      {isModalOpen && (<Modal />)}
+    </>
   )
 }

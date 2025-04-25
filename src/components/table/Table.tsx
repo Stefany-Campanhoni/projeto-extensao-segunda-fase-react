@@ -17,7 +17,7 @@ export function Table<T>({ columns, rowsData, classNamed, emptyText = "" }: Tabl
           {columns.map((column) => (
             <th
               key={column.key}
-              className={`table-header-cell ${column.className || ""}`}
+              className={`table-header-cell`}
             >
               {column.label}
             </th>

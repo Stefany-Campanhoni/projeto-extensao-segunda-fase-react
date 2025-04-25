@@ -6,7 +6,9 @@ type ButtonProps = {
   children?: React.ReactNode
   variant?: "primary" | "edit" | "save" | "danger"
   icon?: IconDefinition | null
+  iconColor?: string
   iconWidth?: number
+  className?: string
   onClick?: () => void
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
@@ -14,7 +16,9 @@ export function Button({
   children,
   variant = "primary",
   icon,
+  iconColor = undefined,
   iconWidth = 20,
+  className = "",
   onClick,
   ...props
 }: ButtonProps) {
@@ -22,7 +26,7 @@ export function Button({
 
   return (
     <button
-      className={`button ${variantClass}`}
+      className={`button ${variantClass} ${className}`}
       onClick={onClick}
       {...props}
     >
@@ -30,6 +34,7 @@ export function Button({
         <FontAwesomeIcon
           width={iconWidth}
           icon={icon}
+          color={iconColor}
           className="icon"
         />
       )}
