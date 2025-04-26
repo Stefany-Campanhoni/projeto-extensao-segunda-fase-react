@@ -5,11 +5,11 @@ import { Page } from "@components/page/Page"
 import { City, MentorPayload, Specialty } from "@custom-types/mentor.types"
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 import "./mentor-form.css"
-import { useState, useEffect } from "react"
 
 const mentorFormSchema = z.object({
   name: z
@@ -35,9 +35,7 @@ const mentorFormSchema = z.object({
       message: "Cidade inválida!",
     }),
 
-  specialtyType: z.coerce
-    .string()
-    .min(1, { message: "O tipo de especialidade é obrigatório" }),
+  specialtyType: z.string().min(1, { message: "O tipo de especialidade é obrigatório" }),
 
   specialtyId: z.coerce
     .number()
@@ -77,8 +75,7 @@ export function MentorForm() {
     ;(async () => {
       setSpecialties(await getSpecialtiesByType(specialtyTypeSelected))
     })()
-  }, [isSpecialtyTypeSelected])
-  
+  }, [specialtyTypeSelected])
 
   async function onSubmit(data: MentorFormData) {
     try {
@@ -146,9 +143,7 @@ export function MentorForm() {
               <option value={city.id}>{city.name}</option>
             ))}
           </select>
-          {errors.cityId && (
-            <span className="error-message">{errors.cityId.message}</span>
-          )}
+          {errors.cityId && <span className="error-message">{errors.cityId.message}</span>}
         </div>
 
         <div className="input-field-container">
@@ -161,10 +156,8 @@ export function MentorForm() {
           </label>
           <select
             id="specialtyTypeId"
-            className={`input-element ${
-              errors.specialtyTypeId ? "input-error" : ""
-            }`}
-            {...register("specialtyTypeId")}
+            className={`input-element ${errors.specialtyType ? "input-error" : ""}`}
+            {...register("specialtyType")}
           >
             <option
               value=""
@@ -178,14 +171,12 @@ export function MentorForm() {
               <option value={specialtyType}>{specialtyType}</option>
             ))}
           </select>
-          {errors.specialtyTypeId && (
-            <span className="error-message">
-              {errors.specialtyTypeId.message}
-            </span>
+          {errors.specialtyType && (
+            <span className="error-message">{errors.specialtyType.message}</span>
           )}
         </div>
 
-        {isSpecialtyTypeSelected && (
+        {specialtyTypeSelected && (
           <div className="input-field-container">
             <label
               htmlFor="specialtyId"
@@ -196,9 +187,7 @@ export function MentorForm() {
             </label>
             <select
               id="specialtyId"
-              className={`input-element ${
-                errors.specialtyId ? "input-error" : ""
-              }`}
+              className={`input-element ${errors.specialtyId ? "input-error" : ""}`}
               {...register("specialtyId")}
             >
               <option
@@ -209,11 +198,12 @@ export function MentorForm() {
               >
                 Selecione sua especialidade
               </option>
+              {specialties.map((specialty) => (
+                <option value={specialty.id}>{specialty.name}</option>
+              ))}
             </select>
             {errors.specialtyId && (
-              <span className="error-message">
-                {errors.specialtyId.message}
-              </span>
+              <span className="error-message">{errors.specialtyId.message}</span>
             )}
           </div>
         )}

@@ -1,4 +1,3 @@
-import React from "react"
 import { Column } from "@custom-types/types"
 import "./table.css"
 
@@ -17,7 +16,7 @@ export function Table<T>({ columns, rowsData, classNamed, emptyText = "" }: Tabl
           {columns.map((column) => (
             <th
               key={column.key}
-              className={`table-header-cell`}
+              className={`table-header-cell ${column.className || ""}`}
             >
               {column.label}
             </th>

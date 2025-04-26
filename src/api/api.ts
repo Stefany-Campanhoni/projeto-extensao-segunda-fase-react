@@ -45,7 +45,9 @@ async function fetchData<TResponse, TBody = unknown>(
 
     if (!response.ok) throw new Error("Network response was not ok")
 
-    return await response.json()
+    if (response.status === 204) return undefined as TResponse
+
+    return response.json()
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error)
     throw new Error("Fetch error: " + errorMessage)
