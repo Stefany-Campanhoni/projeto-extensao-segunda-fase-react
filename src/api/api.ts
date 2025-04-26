@@ -1,4 +1,4 @@
-const BASE_PATH = "http://localhost:8080/"
+const BASE_PATH = "http://localhost:8080"
 
 export async function get<TResponse>(uri: string, headers: HeadersInit = {}): Promise<TResponse> {
   return await fetchData<TResponse>(uri, "GET", undefined, headers)

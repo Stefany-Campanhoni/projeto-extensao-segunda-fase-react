@@ -1,6 +1,6 @@
-import { getAll } from "@api/mentor.api"
+import { getAll, remove } from "@api/mentor.api"
 import { Button } from "@components/button/Button"
-import { Modal } from "@components/modal/Modal"
+import { DeleteModal } from "@components/modal/DeleteModal"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
 import { Column, Mentor } from "@custom-types/types"
@@ -13,6 +13,20 @@ export function Dashboard() {
   const navigate = useNavigate()
   const [mentors, setMentors] = useState<Mentor[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [mentorIdToDelete, setMentorIdToDelete] = useState<number | undefined>()
+
+  function toggleModal(mentor?: Mentor) {
+    setIsModalOpen(!isModalOpen)
+    setMentorIdToDelete(mentor?.id)
+  }
+
+  async function deleteMentor() {
+    console.log(mentorIdToDelete)
+
+    if (mentorIdToDelete) {
+      await remove(mentorIdToDelete)
+    }
+  }
 
   const columns: Column<Mentor>[] = [
     { key: "id", label: "Código" },
@@ -56,7 +70,7 @@ export function Dashboard() {
             variant="danger"
             icon={faTrash}
             className="action-buttons"
-            onClick={() => setIsModalOpen(!isModalOpen)}
+            onClick={() => toggleModal(mentor)}
           />
         </>
       ),
@@ -92,7 +106,12 @@ export function Dashboard() {
         />
       </Page>
 
-      {isModalOpen && <Modal />}
+      {isModalOpen && (
+        <DeleteModal
+          onClose={toggleModal}
+          onConfirmation={deleteMentor}
+        />
+      )}
     </>
   )
 }

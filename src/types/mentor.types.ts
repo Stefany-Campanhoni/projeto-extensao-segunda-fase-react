@@ -1,10 +1,10 @@
-type City = {
+export type City = {
   id: number
   name: string
   state: string
 }
 
-type Specialty = {
+export type Specialty = {
   id: number
   name: string
   type: string
@@ -19,7 +19,8 @@ export type Mentor = {
   specialty: Specialty
 }
 
-export type MentorPayload = Omit<Mentor, "city" | "specialty"> & {
+export type MentorPayload = Omit<Mentor, "city" | "specialty" | "id"> & {
+  id?: number
   cityId: number
   specialtyId: number
 }

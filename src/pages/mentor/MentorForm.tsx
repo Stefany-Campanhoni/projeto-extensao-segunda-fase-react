@@ -1,14 +1,15 @@
-import { create } from "@api/mentor.api"
+import { create, getCities, getSpecialtiesByType, getSpecialtyTypes } from "@api/mentor.api"
 import { Button } from "@components/button/Button"
 import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
-import { MentorPayload } from "@custom-types/mentor.types"
+import { City, MentorPayload, Specialty } from "@custom-types/mentor.types"
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 import "./mentor-form.css"
+import { useState, useEffect } from "react"
 
 const mentorFormSchema = z.object({
   name: z
@@ -34,13 +35,9 @@ const mentorFormSchema = z.object({
       message: "Cidade inválida!",
     }),
 
-  specialtyTypeId: z.coerce
-    .number()
-    .int()
-    .positive({ message: "Tipo de especialidade inválido" })
-    .refine((val) => !isNaN(val) && val !== 0, {
-      message: "Tipo de especialidade inválido",
-    }),
+  specialtyType: z.coerce
+    .string()
+    .min(1, { message: "O tipo de especialidade é obrigatório" }),
 
   specialtyId: z.coerce
     .number()
@@ -58,15 +55,34 @@ export function MentorForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<MentorFormData>({
     resolver: zodResolver(mentorFormSchema),
   })
 
+  const [cities, setCities] = useState<City[]>([])
+  const [specialtyTypes, setSpecialtyTypes] = useState<string[]>([])
+  const [specialties, setSpecialties] = useState<Specialty[]>([])
+  const specialtyTypeSelected = watch("specialtyType")
+
+  useEffect(() => {
+    ;(async () => {
+      setSpecialtyTypes(await getSpecialtyTypes())
+      setCities(await getCities())
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      setSpecialties(await getSpecialtiesByType(specialtyTypeSelected))
+    })()
+  }, [isSpecialtyTypeSelected])
+  
+
   async function onSubmit(data: MentorFormData) {
     try {
-      const { specialtyTypeId, ...mentorData } = data
-      await create(mentorData as MentorPayload)
+      await create(data as MentorPayload)
       navigate("/")
     } catch (error) {
       console.error("Error creating mentor:", error)
@@ -126,8 +142,13 @@ export function MentorForm() {
             >
               Selecione uma cidade
             </option>
+            {cities.map((city) => (
+              <option value={city.id}>{city.name}</option>
+            ))}
           </select>
-          {errors.cityId && <span className="error-message">{errors.cityId.message}</span>}
+          {errors.cityId && (
+            <span className="error-message">{errors.cityId.message}</span>
+          )}
         </div>
 
         <div className="input-field-container">
@@ -140,7 +161,9 @@ export function MentorForm() {
           </label>
           <select
             id="specialtyTypeId"
-            className={`input-element ${errors.specialtyTypeId ? "input-error" : ""}`}
+            className={`input-element ${
+              errors.specialtyTypeId ? "input-error" : ""
+            }`}
             {...register("specialtyTypeId")}
           >
             <option
@@ -151,38 +174,50 @@ export function MentorForm() {
             >
               Selecione em qual área sua especialidade se encaixa
             </option>
+            {specialtyTypes.map((specialtyType) => (
+              <option value={specialtyType}>{specialtyType}</option>
+            ))}
           </select>
           {errors.specialtyTypeId && (
-            <span className="error-message">{errors.specialtyTypeId.message}</span>
+            <span className="error-message">
+              {errors.specialtyTypeId.message}
+            </span>
           )}
         </div>
 
-        <div className="input-field-container">
-          <label
-            htmlFor="specialtyId"
-            className="input-label"
-          >
-            Especialidade
-            <span className="required-mark">*</span>
-          </label>
-          <select
-            id="specialtyId"
-            className={`input-element ${errors.specialtyId ? "input-error" : ""}`}
-            {...register("specialtyId")}
-          >
-            <option
-              value=""
-              disabled
-              selected
-              hidden
+        {isSpecialtyTypeSelected && (
+          <div className="input-field-container">
+            <label
+              htmlFor="specialtyId"
+              className="input-label"
             >
-              Selecione sua especialidade
-            </option>
-          </select>
-          {errors.specialtyId && (
-            <span className="error-message">{errors.specialtyId.message}</span>
-          )}
-        </div>
+              Especialidade
+              <span className="required-mark">*</span>
+            </label>
+            <select
+              id="specialtyId"
+              className={`input-element ${
+                errors.specialtyId ? "input-error" : ""
+              }`}
+              {...register("specialtyId")}
+            >
+              <option
+                value=""
+                disabled
+                selected
+                hidden
+              >
+                Selecione sua especialidade
+              </option>
+            </select>
+            {errors.specialtyId && (
+              <span className="error-message">
+                {errors.specialtyId.message}
+              </span>
+            )}
+          </div>
+        )}
+
         <section className="button-container">
           <Button
             type="button"
