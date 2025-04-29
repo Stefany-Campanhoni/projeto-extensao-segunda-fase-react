@@ -7,7 +7,7 @@
 .action-buttons {
   width: 35px;
   height: 35px;
-  display: inline-block;
+  display: inline-flex;
   border-radius: 100%;
   margin: 0 3px;
 }

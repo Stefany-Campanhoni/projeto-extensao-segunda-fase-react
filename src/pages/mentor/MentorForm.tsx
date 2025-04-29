@@ -95,7 +95,7 @@ export function MentorForm() {
       const specialtiesForType = await getSpecialtiesByType(mentorData.specialty.type)
       setSpecialties(specialtiesForType)
     })()
-  }, [id])
+  }, [id, setValue])
 
   useEffect(() => {
     ;(async () => {
