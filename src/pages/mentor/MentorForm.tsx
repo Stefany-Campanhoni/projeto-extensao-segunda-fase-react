@@ -1,13 +1,19 @@
-import { create, getCities, getSpecialtiesByType, getSpecialtyTypes } from "@api/mentor.api"
+import {
+  create,
+  getById,
+  getCities,
+  getSpecialtiesByType,
+  getSpecialtyTypes,
+} from "@api/mentor.api"
 import { Button } from "@components/button/Button"
 import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
-import { City, MentorPayload, Specialty } from "@custom-types/mentor.types"
+import { City, Mentor, MentorPayload, Specialty } from "@custom-types/mentor.types"
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { z } from "zod"
 import "./mentor-form.css"
 
@@ -59,23 +65,45 @@ export function MentorForm() {
     resolver: zodResolver(mentorFormSchema),
   })
 
+  const { id } = useParams()
+
+  const [mentor, setMentor] = useState<Mentor>()
   const [cities, setCities] = useState<City[]>([])
   const [specialtyTypes, setSpecialtyTypes] = useState<string[]>([])
   const [specialties, setSpecialties] = useState<Specialty[]>([])
-  const specialtyTypeSelected = watch("specialtyType")
+  const specialtyTypeSelected = useRef(watch("specialtyType"))
 
   useEffect(() => {
-    ;(async () => {
-      setSpecialtyTypes(await getSpecialtyTypes())
-      setCities(await getCities())
-    })()
+    populateBaseSelect()
   }, [])
 
   useEffect(() => {
     ;(async () => {
-      setSpecialties(await getSpecialtiesByType(specialtyTypeSelected))
+      if (!id) return
+
+      const mentor = await getById(Number.parseInt(id))
+      setMentor(mentor)
+      specialtyTypeSelected.current = mentor.specialty.type
+
+      populateBaseSelect()
+      populateSpecialtyField()
     })()
-  }, [specialtyTypeSelected])
+  }, [id])
+
+  useEffect(() => {
+    ;(async () => {
+      populateSpecialtyField()
+    })()
+  }, [specialtyTypeSelected.current])
+
+  async function populateBaseSelect() {
+    setSpecialtyTypes(await getSpecialtyTypes())
+    setCities(await getCities())
+  }
+
+  async function populateSpecialtyField() {
+    setSpecialties(await getSpecialtiesByType(specialtyTypeSelected.current))
+  }
 
   async function onSubmit(data: MentorFormData) {
     try {
@@ -98,6 +126,7 @@ export function MentorForm() {
           register={register}
           error={errors.name?.message}
           placeholder="Digite seu nome completo"
+          value={mentor ? mentor.name : undefined}
         />
 
         <InputField
@@ -107,6 +136,7 @@ export function MentorForm() {
           register={register}
           error={errors.email?.message}
           placeholder="Digite seu email"
+          value={mentor ? mentor.email : undefined}
         />
 
         <InputField
@@ -116,6 +146,7 @@ export function MentorForm() {
           register={register}
           error={errors.description?.message}
           placeholder="Descreva suas experiências e habilidades..."
+          value={mentor ? mentor.description : undefined}
         />
 
         <div className="input-field-container">
@@ -140,7 +171,12 @@ export function MentorForm() {
               Selecione uma cidade
             </option>
             {cities.map((city) => (
-              <option value={city.id}>{city.name}</option>
+              <option
+                value={city.id}
+                selected={Boolean(mentor?.city)}
+              >
+                {city.name}
+              </option>
             ))}
           </select>
           {errors.cityId && <span className="error-message">{errors.cityId.message}</span>}
@@ -168,7 +204,12 @@ export function MentorForm() {
               Selecione em qual área sua especialidade se encaixa
             </option>
             {specialtyTypes.map((specialtyType) => (
-              <option value={specialtyType}>{specialtyType}</option>
+              <option
+                value={specialtyType}
+                selected={Boolean(mentor?.specialty)}
+              >
+                {specialtyType}
+              </option>
             ))}
           </select>
           {errors.specialtyType && (
@@ -176,7 +217,7 @@ export function MentorForm() {
           )}
         </div>
 
-        {specialtyTypeSelected && (
+        {specialtyTypeSelected.current && (
           <div className="input-field-container">
             <label
               htmlFor="specialtyId"
@@ -199,7 +240,12 @@ export function MentorForm() {
                 Selecione sua especialidade
               </option>
               {specialties.map((specialty) => (
-                <option value={specialty.id}>{specialty.name}</option>
+                <option
+                  value={specialty.id}
+                  selected={Boolean(mentor?.specialty)}
+                >
+                  {specialty.name}
+                </option>
               ))}
             </select>
             {errors.specialtyId && (
