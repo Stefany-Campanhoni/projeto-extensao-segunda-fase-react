@@ -1,6 +1,6 @@
 import { Button } from "@components/button/Button"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faX } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import "./delete-modal.css"
 
 type ModalProps = {
@@ -9,6 +9,11 @@ type ModalProps = {
 }
 
 export function DeleteModal({ onClose, onConfirmation }: ModalProps) {
+  function executeConfirmation() {
+    onConfirmation()
+    onClose()
+  }
+
   return (
     <div className="modal-container">
       <section className="modal-content">
@@ -23,7 +28,7 @@ export function DeleteModal({ onClose, onConfirmation }: ModalProps) {
           <section className="confirmation-buttons-container">
             <Button
               variant="danger"
-              onClick={onConfirmation}
+              onClick={executeConfirmation}
             >
               Excluir
             </Button>

@@ -1,4 +1,10 @@
-import { create, getCities, getSpecialtiesByType, getSpecialtyTypes } from "@api/mentor.api"
+import {
+  create,
+  getById,
+  getCities,
+  getSpecialtiesByType,
+  getSpecialtyTypes,
+} from "@api/mentor.api"
 import { Button } from "@components/button/Button"
 import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
@@ -7,7 +13,7 @@ import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { z } from "zod"
 import "./mentor-form.css"
 
@@ -50,10 +56,13 @@ export type MentorFormData = z.infer<typeof mentorFormSchema>
 
 export function MentorForm() {
   const navigate = useNavigate()
+  const { id } = useParams()
+
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<MentorFormData>({
     resolver: zodResolver(mentorFormSchema),
@@ -62,20 +71,45 @@ export function MentorForm() {
   const [cities, setCities] = useState<City[]>([])
   const [specialtyTypes, setSpecialtyTypes] = useState<string[]>([])
   const [specialties, setSpecialties] = useState<Specialty[]>([])
-  const specialtyTypeSelected = watch("specialtyType")
+
+  const specialtyType = watch("specialtyType")
 
   useEffect(() => {
-    ;(async () => {
-      setSpecialtyTypes(await getSpecialtyTypes())
-      setCities(await getCities())
-    })()
+    populateBaseSelect()
   }, [])
 
   useEffect(() => {
+    if (!id) return
     ;(async () => {
-      setSpecialties(await getSpecialtiesByType(specialtyTypeSelected))
+      const mentorData = await getById(Number.parseInt(id))
+
+      setValue("name", mentorData.name)
+      setValue("email", mentorData.email)
+      setValue("description", mentorData.description)
+      setValue("cityId", mentorData.city.id)
+      setValue("specialtyType", mentorData.specialty.type)
+      setValue("specialtyId", mentorData.specialty.id)
+
+      await populateBaseSelect()
+
+      const specialtiesForType = await getSpecialtiesByType(mentorData.specialty.type)
+      setSpecialties(specialtiesForType)
     })()
-  }, [specialtyTypeSelected])
+  }, [id])
+
+  useEffect(() => {
+    ;(async () => {
+      if (specialtyType) {
+        setSpecialties(await getSpecialtiesByType(specialtyType))
+      }
+    })()
+  }, [specialtyType])
+
+  async function populateBaseSelect() {
+    const [types, citiesData] = await Promise.all([getSpecialtyTypes(), getCities()])
+    setSpecialtyTypes(types)
+    setCities(citiesData)
+  }
 
   async function onSubmit(data: MentorFormData) {
     try {
@@ -140,7 +174,12 @@ export function MentorForm() {
               Selecione uma cidade
             </option>
             {cities.map((city) => (
-              <option value={city.id}>{city.name}</option>
+              <option
+                key={city.id}
+                value={city.id}
+              >
+                {city.name}
+              </option>
             ))}
           </select>
           {errors.cityId && <span className="error-message">{errors.cityId.message}</span>}
@@ -168,7 +207,12 @@ export function MentorForm() {
               Selecione em qual área sua especialidade se encaixa
             </option>
             {specialtyTypes.map((specialtyType) => (
-              <option value={specialtyType}>{specialtyType}</option>
+              <option
+                key={specialtyType}
+                value={specialtyType}
+              >
+                {specialtyType}
+              </option>
             ))}
           </select>
           {errors.specialtyType && (
@@ -176,7 +220,7 @@ export function MentorForm() {
           )}
         </div>
 
-        {specialtyTypeSelected && (
+        {specialtyType && (
           <div className="input-field-container">
             <label
               htmlFor="specialtyId"
@@ -199,7 +243,12 @@ export function MentorForm() {
                 Selecione sua especialidade
               </option>
               {specialties.map((specialty) => (
-                <option value={specialty.id}>{specialty.name}</option>
+                <option
+                  key={specialty.id}
+                  value={specialty.id}
+                >
+                  {specialty.name}
+                </option>
               ))}
             </select>
             {errors.specialtyId && (

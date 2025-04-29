@@ -21,10 +21,9 @@ export function Dashboard() {
   }
 
   async function deleteMentor() {
-    console.log(mentorIdToDelete)
-
     if (mentorIdToDelete) {
       await remove(mentorIdToDelete)
+      setMentors(mentors.filter((mentor) => mentor.id !== mentorIdToDelete))
     }
   }
 
