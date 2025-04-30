@@ -3,14 +3,20 @@ import "./page.css"
 
 type PageProps = {
   children: React.ReactNode
-  className?: string
   title: string
+  className?: string
+  headerClass?: string
 }
 
-export function Page({ children, className = "", title }: PageProps) {
+export function Page({
+  children,
+  title,
+  className = "",
+  headerClass = "",
+}: PageProps) {
   return (
     <>
-      <Header title={title} />
+      <Header title={title} className={headerClass} />
       <main className={`page-content ${className}`}>{children}</main>
     </>
   )

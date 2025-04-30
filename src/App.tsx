@@ -2,6 +2,7 @@ import { Dashboard } from "@pages/dashboard/Dashboard"
 import { MentorForm } from "@pages/mentor/MentorForm"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import "./App.css"
+import { PublicView } from "@pages/mentor/PublicView"
 
 function App() {
   return (
@@ -16,10 +17,14 @@ function App() {
             />
           }
         />
-
         <Route
           path="/dashboard"
           element={<Dashboard />}
+        />
+
+        <Route
+          path="/public"
+          element={<PublicView />}
         />
 
         <Route

@@ -1,0 +1,16 @@
+.filter-container {
+  max-width: 1200px;
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.filter-control {
+  align-self: last baseline;
+  margin-bottom: 20px;
+}
+
+.filter-control > button {
+  height: 38px;
+}

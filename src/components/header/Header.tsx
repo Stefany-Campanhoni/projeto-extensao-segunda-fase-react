@@ -1,9 +1,14 @@
 import logo from "@assets/logo.png"
 import "./header.css"
 
-export function Header({ title }: { title: string }) {
+type HeaderProps = {
+  title: string
+  className?: string
+}
+
+export function Header({ title, className }: HeaderProps) {
   return (
-    <header className="topbar">
+    <header className={`topbar ${className}`}>
       <img
         src={logo}
         alt="logo.png"
