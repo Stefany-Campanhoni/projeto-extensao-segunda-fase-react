@@ -26,6 +26,7 @@ const mentorFormSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Email é obrigatório" })
+    .max(80, { message: "O email deve ser menor que 80 caracteres!" })
     .email({ message: "Email inválido!" }),
 
   description: z
