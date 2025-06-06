@@ -23,3 +23,25 @@
   font-weight: bold;
   width: 100%;
 }
+
+.topbar > button {
+  width: 55px;
+  height: 51px;
+  background-color: #00000000;
+  border-radius: 50%;
+  border: 2px solid #f7f7f0;
+  transition: ease-in-out 200ms;
+}
+
+.topbar > button > .header-icon {
+  transition: ease-in-out 200ms;
+}
+
+.topbar > button:hover {
+  opacity: .8;
+  border: 2px solid #222221;
+}
+
+.topbar > button:hover .header-icon {
+  color: #222221;
+}
