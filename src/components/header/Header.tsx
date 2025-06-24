@@ -16,7 +16,7 @@ export function Header({ title, className }: HeaderProps) {
         alt="logo.png"
       />
       <h1>{title}</h1>
-      <button>
+      <button className="user-modal" >
         <FontAwesomeIcon
           icon={faUser}
           size="2x"
