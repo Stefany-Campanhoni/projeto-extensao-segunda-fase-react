@@ -3,8 +3,10 @@ import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
 import { faSignInAlt, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAuth } from "@security/contexts/AuthContext"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { z } from "zod"
 import "./login.css"
 
@@ -23,6 +25,10 @@ export type LoginFormData = z.infer<typeof loginFormSchema>
 
 export function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
 
   const {
     register,
@@ -33,14 +39,20 @@ export function Login() {
   })
 
   async function onSubmit(data: LoginFormData) {
-    try {
-      // TODO: Implement actual login logic here
-      console.log("Login data:", data)
+    setIsLoading(true)
+    setLoginError(null)
 
-      // For now, just navigate to dashboard after "successful" login
-      navigate("/dashboard")
+    try {
+      await login(data)
+
+      // Navigate to the page they were trying to access, or dashboard by default
+      const from = (location.state as any)?.from?.pathname || "/dashboard"
+      navigate(from, { replace: true })
     } catch (error) {
       console.error("Error during login:", error)
+      setLoginError("Email ou senha inválidos. Tente novamente.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -58,6 +70,22 @@ export function Login() {
           <div className="login-header">
             <h2>Fazer Login</h2>
             <p>Entre com suas credenciais para acessar sua conta</p>
+            {loginError && (
+              <div
+                className="login-error"
+                style={{
+                  color: "#dc2626",
+                  fontSize: "0.875rem",
+                  marginTop: "0.5rem",
+                  padding: "0.5rem",
+                  backgroundColor: "#fef2f2",
+                  border: "1px solid #fecaca",
+                  borderRadius: "0.375rem",
+                }}
+              >
+                {loginError}
+              </div>
+            )}
           </div>
 
           <InputField
@@ -93,8 +121,9 @@ export function Login() {
               type="submit"
               variant="save"
               icon={faSignInAlt}
+              disabled={isLoading}
             >
-              Entrar
+              {isLoading ? "Entrando..." : "Entrar"}
             </Button>
           </section>
         </form>

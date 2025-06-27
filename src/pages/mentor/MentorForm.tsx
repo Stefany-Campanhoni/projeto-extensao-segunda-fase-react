@@ -4,6 +4,7 @@ import {
   getCities,
   getSpecialtiesByType,
   getSpecialtyTypes,
+  update,
 } from "@api/mentor.api"
 import { Button } from "@components/button/Button"
 import { InputField } from "@components/input/InputField"
@@ -17,7 +18,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { z } from "zod"
 import "./mentor-form.css"
 
-const mentorFormSchema = z.object({
+const baseMentorFormSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Nome é obrigatório" })
@@ -53,11 +54,24 @@ const mentorFormSchema = z.object({
     }),
 })
 
-export type MentorFormData = z.infer<typeof mentorFormSchema>
+const createMentorFormSchema = baseMentorFormSchema.extend({
+  password: z
+    .string()
+    .min(1, { message: "Senha é obrigatória" })
+    .min(6, { message: "A senha deve ter pelo menos 6 caracteres" })
+    .max(100, { message: "A senha deve ter no máximo 100 caracteres" }),
+})
+
+const editMentorFormSchema = baseMentorFormSchema
+
+export type CreateMentorFormData = z.infer<typeof createMentorFormSchema>
+export type EditMentorFormData = z.infer<typeof editMentorFormSchema>
+export type MentorFormData = CreateMentorFormData | EditMentorFormData
 
 export function MentorForm() {
   const navigate = useNavigate()
   const { id } = useParams()
+  const isEditing = !!id
 
   const {
     register,
@@ -65,8 +79,8 @@ export function MentorForm() {
     watch,
     setValue,
     formState: { errors },
-  } = useForm<MentorFormData>({
-    resolver: zodResolver(mentorFormSchema),
+  } = useForm<CreateMentorFormData>({
+    resolver: zodResolver(isEditing ? (editMentorFormSchema as any) : createMentorFormSchema),
   })
 
   const [cities, setCities] = useState<City[]>([])
@@ -112,17 +126,24 @@ export function MentorForm() {
     setCities(citiesData)
   }
 
-  async function onSubmit(data: MentorFormData) {
+  async function onSubmit(data: CreateMentorFormData) {
     try {
-      await create(data as MentorPayload)
+      if (isEditing) {
+        // For editing, remove password field and call update
+        const { password, ...updateData } = data
+        await update(Number.parseInt(id!), updateData as MentorPayload)
+      } else {
+        // For creation, include password
+        await create(data as MentorPayload)
+      }
       navigate("/")
     } catch (error) {
-      console.error("Error creating mentor:", error)
+      console.error(`Error ${isEditing ? "updating" : "creating"} mentor:`, error)
     }
   }
 
   return (
-    <Page title="Cadastrar Mentor">
+    <Page title={isEditing ? "Editar Mentor" : "Cadastrar Mentor"}>
       <form
         className="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -143,6 +164,18 @@ export function MentorForm() {
           error={errors.email?.message}
           placeholder="Digite seu email"
         />
+
+        {!isEditing && (
+          <InputField
+            label="Senha"
+            name="password"
+            type="password"
+            register={register}
+            error={errors.password?.message}
+            placeholder="Digite sua senha"
+            required
+          />
+        )}
 
         <InputField
           label="Descrição"

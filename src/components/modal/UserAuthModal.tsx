@@ -1,6 +1,14 @@
 import { Button } from "@components/button/Button"
-import { faSignInAlt, faUserPlus, faX } from "@fortawesome/free-solid-svg-icons"
+import {
+  faSignInAlt,
+  faSignOutAlt,
+  faTachometerAlt,
+  faUserPlus,
+  faX,
+} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useAuth } from "@security/contexts/AuthContext"
+import { Role } from "@security/types/auth.types"
 import { useEffect } from "react"
 import "./user-auth-modal.css"
 
@@ -8,9 +16,19 @@ type UserAuthModalProps = {
   onClose: () => void
   onLogin: () => void
   onRegister: () => void
+  onLogout?: () => void
+  onDashboard?: () => void
 }
 
-export function UserAuthModal({ onClose, onLogin, onRegister }: UserAuthModalProps) {
+export function UserAuthModal({
+  onClose,
+  onLogin,
+  onRegister,
+  onLogout,
+  onDashboard,
+}: UserAuthModalProps) {
+  const { isAuthenticated, user } = useAuth()
+
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose()
@@ -59,7 +77,7 @@ export function UserAuthModal({ onClose, onLogin, onRegister }: UserAuthModalPro
             id="modal-title"
             className="user-auth-modal-title"
           >
-            Acesso à Conta
+            {isAuthenticated ? `Olá, ${user?.email}` : "Acesso à Conta"}
           </h2>
           <button
             className="close-user-auth-modal-button"
@@ -74,27 +92,56 @@ export function UserAuthModal({ onClose, onLogin, onRegister }: UserAuthModalPro
         </div>
 
         <div className="auth-options">
-          <Button
-            onClick={handleLoginClick}
-            icon={faSignInAlt}
-            aria-label="Fazer login na sua conta"
-            className="auth-button"
-          >
-            Fazer Login
-          </Button>
+          {isAuthenticated ? (
+            // Authenticated user options
+            <>
+              {user?.role === Role.ADMIN && (
+                <Button
+                  onClick={onDashboard}
+                  icon={faTachometerAlt}
+                  aria-label="Ir para dashboard"
+                  className="auth-button"
+                >
+                  Dashboard
+                </Button>
+              )}
 
-          <div className="auth-divider">
-            <span>ou</span>
-          </div>
+              <Button
+                onClick={onLogout}
+                icon={faSignOutAlt}
+                aria-label="Fazer logout"
+                className="auth-button"
+                variant="danger"
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            // Unauthenticated user options
+            <>
+              <Button
+                onClick={handleLoginClick}
+                icon={faSignInAlt}
+                aria-label="Fazer login na sua conta"
+                className="auth-button"
+              >
+                Fazer Login
+              </Button>
 
-          <Button
-            onClick={handleRegisterClick}
-            icon={faUserPlus}
-            aria-label="Criar uma nova conta"
-            className="auth-button"
-          >
-            Criar Conta
-          </Button>
+              <div className="auth-divider">
+                <span>ou</span>
+              </div>
+
+              <Button
+                onClick={handleRegisterClick}
+                icon={faUserPlus}
+                aria-label="Criar uma nova conta"
+                className="auth-button"
+              >
+                Criar Conta
+              </Button>
+            </>
+          )}
         </div>
       </section>
     </div>

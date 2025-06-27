@@ -4,6 +4,8 @@ import { Dashboard } from "@pages/dashboard/Dashboard"
 import { ErrorPage } from "@pages/error/ErrorPage"
 import { MentorForm } from "@pages/mentor/MentorForm"
 import { PublicView } from "@pages/mentor/PublicView"
+import { ProtectedRoute, PublicRoute } from "@security/components/ProtectedRoute"
+import { Role } from "@security/types/auth.types"
 import { createBrowserRouter, Navigate } from "react-router-dom"
 
 export const router = createBrowserRouter([
@@ -23,7 +25,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute requiredRole={Role.ADMIN}>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "public",
@@ -31,18 +37,26 @@ export const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
       {
         path: "mentors",
         children: [
           {
             path: "create",
-            element: <MentorForm />,
+            element: <MentorForm />, // Public route
           },
           {
             path: ":id/edit",
-            element: <MentorForm />,
+            element: (
+              <ProtectedRoute>
+                <MentorForm />
+              </ProtectedRoute>
+            ),
           },
         ],
       },

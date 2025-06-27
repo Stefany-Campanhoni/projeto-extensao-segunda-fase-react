@@ -1,6 +1,7 @@
 import logo from "@assets/logo.png"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useAuth } from "@security/contexts/AuthContext"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { UserAuthModal } from "../modal/UserAuthModal"
@@ -14,9 +15,16 @@ type HeaderProps = {
 export function Header({ title, className }: HeaderProps) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const navigate = useNavigate()
+  const { isAuthenticated, logout } = useAuth()
 
   const handleUserButtonClick = () => {
-    setIsAuthModalOpen(true)
+    if (isAuthenticated) {
+      // If authenticated, show user menu
+      setIsAuthModalOpen(true)
+    } else {
+      // If not authenticated, show auth modal
+      setIsAuthModalOpen(true)
+    }
   }
 
   const handleCloseModal = () => {
@@ -25,10 +33,23 @@ export function Header({ title, className }: HeaderProps) {
 
   const handleLogin = () => {
     navigate("/login")
+    setIsAuthModalOpen(false)
   }
 
   const handleRegister = () => {
     navigate("/mentors/create")
+    setIsAuthModalOpen(false)
+  }
+
+  const handleLogout = () => {
+    logout()
+    navigate("/public")
+    setIsAuthModalOpen(false)
+  }
+
+  const handleDashboard = () => {
+    navigate("/dashboard")
+    setIsAuthModalOpen(false)
   }
 
   return (
@@ -56,6 +77,8 @@ export function Header({ title, className }: HeaderProps) {
           onClose={handleCloseModal}
           onLogin={handleLogin}
           onRegister={handleRegister}
+          onLogout={handleLogout}
+          onDashboard={handleDashboard}
         />
       )}
     </>
