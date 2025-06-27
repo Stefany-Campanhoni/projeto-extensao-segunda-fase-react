@@ -14,7 +14,7 @@ type ButtonProps = {
 
 export function Button({
   children,
-  variant = "primary",
+  variant,
   icon,
   iconColor = undefined,
   iconWidth = 20,
@@ -22,7 +22,7 @@ export function Button({
   onClick,
   ...props
 }: ButtonProps) {
-  const variantClass = `button--${variant}`
+  const variantClass = variant ? `button--${variant}` : ""
 
   return (
     <button

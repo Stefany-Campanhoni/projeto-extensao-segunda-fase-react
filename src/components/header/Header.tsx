@@ -1,6 +1,8 @@
 import logo from "@assets/logo.png"
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useState } from "react"
+import { UserAuthModal } from "../modal/UserAuthModal"
 import "./header.css"
 
 type HeaderProps = {
@@ -9,20 +11,53 @@ type HeaderProps = {
 }
 
 export function Header({ title, className }: HeaderProps) {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+
+  const handleUserButtonClick = () => {
+    setIsAuthModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsAuthModalOpen(false)
+  }
+
+  const handleLogin = () => {
+    // TODO: Implement login logic
+    console.log("Login clicked")
+  }
+
+  const handleRegister = () => {
+    // TODO: Implement register logic
+    console.log("Register clicked")
+  }
+
   return (
-    <header className={`topbar ${className}`}>
-      <img
-        src={logo}
-        alt="logo.png"
-      />
-      <h1>{title}</h1>
-      <button className="user-modal" >
-        <FontAwesomeIcon
-          icon={faUser}
-          size="2x"
-          className="header-icon"
+    <>
+      <header className={`topbar ${className}`}>
+        <img
+          src={logo}
+          alt="logo.png"
         />
-      </button>
-    </header>
+        <h1>{title}</h1>
+        <button
+          className="user-modal"
+          onClick={handleUserButtonClick}
+        >
+          <FontAwesomeIcon
+            icon={faUser}
+            size="2x"
+            className="header-icon"
+          />
+        </button>
+      </header>
+
+      {isAuthModalOpen && (
+        <UserAuthModal
+          onClose={handleCloseModal}
+          onLogin={handleLogin}
+          onRegister={handleRegister}
+        />
+      )}
+    </>
   )
 }
