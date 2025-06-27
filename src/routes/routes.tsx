@@ -1,9 +1,10 @@
-import { createBrowserRouter, Navigate } from "react-router-dom"
+import { Layout } from "@components/layout/Layout"
+import { Login } from "@pages/auth/Login"
 import { Dashboard } from "@pages/dashboard/Dashboard"
+import { ErrorPage } from "@pages/error/ErrorPage"
 import { MentorForm } from "@pages/mentor/MentorForm"
 import { PublicView } from "@pages/mentor/PublicView"
-import { Layout } from "@components/layout/Layout"
-import { ErrorPage } from "@pages/error/ErrorPage"
+import { createBrowserRouter, Navigate } from "react-router-dom"
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: "public",
         element: <PublicView />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
       {
         path: "mentors",

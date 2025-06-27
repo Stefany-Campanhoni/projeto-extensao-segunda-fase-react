@@ -2,6 +2,7 @@ import logo from "@assets/logo.png"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { UserAuthModal } from "../modal/UserAuthModal"
 import "./header.css"
 
@@ -12,6 +13,7 @@ type HeaderProps = {
 
 export function Header({ title, className }: HeaderProps) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const navigate = useNavigate()
 
   const handleUserButtonClick = () => {
     setIsAuthModalOpen(true)
@@ -22,13 +24,11 @@ export function Header({ title, className }: HeaderProps) {
   }
 
   const handleLogin = () => {
-    // TODO: Implement login logic
-    console.log("Login clicked")
+    navigate("/login")
   }
 
   const handleRegister = () => {
-    // TODO: Implement register logic
-    console.log("Register clicked")
+    navigate("/mentors/create")
   }
 
   return (
