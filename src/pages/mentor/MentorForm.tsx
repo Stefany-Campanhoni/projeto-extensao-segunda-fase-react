@@ -154,6 +154,7 @@ export function MentorForm() {
           register={register}
           error={errors.name?.message}
           placeholder="Digite seu nome completo"
+          required
         />
 
         <InputField
@@ -163,6 +164,7 @@ export function MentorForm() {
           register={register}
           error={errors.email?.message}
           placeholder="Digite seu email"
+          required
         />
 
         {!isEditing && (
@@ -184,6 +186,7 @@ export function MentorForm() {
           register={register}
           error={errors.description?.message}
           placeholder="Descreva suas experiências e habilidades..."
+          required
         />
 
         <div className="input-field-container">

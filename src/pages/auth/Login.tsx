@@ -126,6 +126,22 @@ export function Login() {
               {isLoading ? "Entrando..." : "Entrar"}
             </Button>
           </section>
+
+          <div className="auth-divider">
+            <span>ou</span>
+          </div>
+
+          <div className="mentor-signup-section">
+            <p>Não tem uma conta?</p>
+            <Button
+              type="button"
+              variant="edit"
+              onClick={() => navigate("/mentors/create")}
+              className="mentor-signup-button"
+            >
+              Faça parte do nosso time de mentores!
+            </Button>
+          </div>
         </form>
       </div>
     </Page>

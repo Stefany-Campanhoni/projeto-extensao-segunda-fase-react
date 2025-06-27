@@ -50,6 +50,47 @@
   font-size: 16px;
 }
 
+.auth-divider {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+  color: #666;
+}
+
+.auth-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #ddd;
+  z-index: 1;
+}
+
+.auth-divider span {
+  background-color: white;
+  padding: 0 15px;
+  position: relative;
+  z-index: 2;
+}
+
+.mentor-signup-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.mentor-signup-section p {
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.mentor-signup-button {
+  width: 100% !important;
+  min-width: unset !important;
+}
+
 @media (max-width: 768px) {
   .login-container {
     padding: 10px;
