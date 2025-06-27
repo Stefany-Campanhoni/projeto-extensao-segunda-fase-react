@@ -23,5 +23,5 @@ export type MentorPayload = Omit<Mentor, "city" | "specialty" | "id"> & {
   id?: number
   cityId: number
   specialtyId: number
-  password?: string // Optional for creation, not needed for updates
+  password?: string
 }

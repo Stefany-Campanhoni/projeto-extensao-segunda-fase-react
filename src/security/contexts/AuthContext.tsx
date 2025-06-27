@@ -7,7 +7,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 const AUTH_STORAGE_KEY = "auth_user"
 const TOKEN_STORAGE_KEY = "auth_token"
 
-interface AuthProviderProps {
+type AuthProviderProps = {
   children: ReactNode
 }
 
@@ -18,7 +18,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isLoading: true,
   })
 
-  // Initialize auth state from localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem(AUTH_STORAGE_KEY)
     const storedToken = localStorage.getItem(TOKEN_STORAGE_KEY)
@@ -46,7 +45,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const response = await loginApi(credentials)
 
-      // Store user data and token
       localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(response))
       localStorage.setItem(TOKEN_STORAGE_KEY, response.token)
 

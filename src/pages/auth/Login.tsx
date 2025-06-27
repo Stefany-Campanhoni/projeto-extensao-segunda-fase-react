@@ -45,7 +45,6 @@ export function Login() {
     try {
       await login(data)
 
-      // Navigate to the page they were trying to access, or dashboard by default
       const from = (location.state as any)?.from?.pathname || "/dashboard"
       navigate(from, { replace: true })
     } catch (error) {
@@ -57,7 +56,7 @@ export function Login() {
   }
 
   const handleCancel = () => {
-    navigate(-1) // Go back to previous page
+    navigate(-1)
   }
 
   return (

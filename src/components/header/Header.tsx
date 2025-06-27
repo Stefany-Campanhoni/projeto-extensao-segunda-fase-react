@@ -19,10 +19,8 @@ export function Header({ title, className }: HeaderProps) {
 
   const handleUserButtonClick = () => {
     if (isAuthenticated) {
-      // If authenticated, show user menu
       setIsAuthModalOpen(true)
     } else {
-      // If not authenticated, show auth modal
       setIsAuthModalOpen(true)
     }
   }

@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "create",
-            element: <MentorForm />, // Public route
+            element: <MentorForm />,
           },
           {
             path: ":id/edit",

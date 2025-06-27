@@ -1,7 +1,5 @@
 import { Mentor, MentorPayload } from "@custom-types/mentor.types"
 
-// These functions should be called with authentication headers
-// Import these from components that require authentication
 export async function updateMentor(
   id: number,
   mentor: MentorPayload,

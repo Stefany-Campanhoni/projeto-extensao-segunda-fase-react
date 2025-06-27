@@ -129,11 +129,9 @@ export function MentorForm() {
   async function onSubmit(data: CreateMentorFormData) {
     try {
       if (isEditing) {
-        // For editing, remove password field and call update
         const { password, ...updateData } = data
         await update(Number.parseInt(id!), updateData as MentorPayload)
       } else {
-        // For creation, include password
         await create(data as MentorPayload)
       }
       navigate("/")

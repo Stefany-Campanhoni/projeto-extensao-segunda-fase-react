@@ -4,7 +4,7 @@ import { Role } from "@security/types/auth.types"
 import type { ReactNode } from "react"
 import { Navigate, useLocation } from "react-router-dom"
 
-interface ProtectedRouteProps {
+type ProtectedRouteProps = {
   children: ReactNode
   requiredRole?: Role
   requireAuth?: boolean
@@ -18,7 +18,6 @@ export function ProtectedRoute({
   const { isAuthenticated, user, isLoading } = useAuth()
   const location = useLocation()
 
-  // Show loading spinner while checking authentication
   if (isLoading) {
     return (
       <div
@@ -34,7 +33,6 @@ export function ProtectedRoute({
     )
   }
 
-  // If authentication is required but user is not authenticated
   if (requireAuth && !isAuthenticated) {
     return (
       <Navigate
@@ -45,7 +43,6 @@ export function ProtectedRoute({
     )
   }
 
-  // If specific role is required but user doesn't have it
   if (requiredRole && (!user || user.role !== requiredRole)) {
     return (
       <Navigate
@@ -58,7 +55,7 @@ export function ProtectedRoute({
   return <>{children}</>
 }
 
-interface PublicRouteProps {
+type PublicRouteProps = {
   children: ReactNode
 }
 
@@ -66,7 +63,6 @@ export function PublicRoute({ children }: PublicRouteProps) {
   const { isAuthenticated, isLoading } = useAuth()
   const location = useLocation()
 
-  // Show loading spinner while checking authentication
   if (isLoading) {
     return (
       <div
@@ -82,7 +78,6 @@ export function PublicRoute({ children }: PublicRouteProps) {
     )
   }
 
-  // If user is already authenticated and trying to access login page, redirect them
   if (isAuthenticated && location.pathname === "/login") {
     const from = (location.state as any)?.from?.pathname || "/dashboard"
     return (

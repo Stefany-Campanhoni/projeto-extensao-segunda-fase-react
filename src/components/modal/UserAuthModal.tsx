@@ -93,7 +93,6 @@ export function UserAuthModal({
 
         <div className="auth-options">
           {isAuthenticated ? (
-            // Authenticated user options
             <>
               {user?.role === Role.ADMIN && (
                 <Button
@@ -117,7 +116,6 @@ export function UserAuthModal({
               </Button>
             </>
           ) : (
-            // Unauthenticated user options
             <>
               <Button
                 onClick={handleLoginClick}
