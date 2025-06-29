@@ -1,0 +1,55 @@
+.topbar {
+  background-image: transparent;
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  overflow: hidden;
+  position: relative;
+}
+
+.topbar > img {
+  position: absolute;
+  left: 20px;
+  width: 200px;
+  height: 70px;
+}
+
+.topbar > h1 {
+  font-size: 24px;
+  font-weight: arial;
+  width: 100%;
+}
+
+.topbar > button {
+  width: 55px;
+  height: 51px;
+  background-color: #00000000;
+  border-radius: 50%;
+  border: 2px solid #f7f7f0;
+  transition: ease-in-out 200ms;
+}
+
+.topbar > button > .header-icon {
+  transition: ease-in-out 200ms;
+}
+
+.topbar > button:hover {
+  opacity: .8;
+  border: 2px solid #986ff7;
+}
+
+.topbar > button:hover .header-icon {
+  color: #986ff7;
+}
+.tagline {
+  font-weight: 700;
+  text-align: center;
+  font-size: 25px;
+  font-style: arial;
+  color: rgb(255, 255, 255);
+  padding-bottom: 30px;
+  margin: 10px 0 20px;
+}

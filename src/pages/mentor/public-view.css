@@ -1,0 +1,17 @@
+.public-view-header {
+  height: 80px;
+}
+
+.public-view-header > h1 {
+  font-size: xx-large;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  row-gap: 20px;
+  justify-content: center;
+  padding: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}

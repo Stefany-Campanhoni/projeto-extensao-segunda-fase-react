@@ -1,0 +1,11 @@
+.card {
+  width: 20rem;
+}
+
+.text-body-secondary {
+  margin-bottom: -2px;
+}
+
+.card-text {
+  color: rgb(141, 141, 141);
+}

@@ -1,0 +1,53 @@
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  padding-top: 40px;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 230px;
+  height: fit-content;
+  position: absolute;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal-button {
+  position: relative;
+  top: -8px;
+  left: 215px;
+  cursor: pointer;
+}
+
+.close-modal-button:hover {
+  opacity: .8;
+}
+
+.confirmation-container {
+  display: flex;
+  margin-top: 15px;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.confirmation-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.confirmation-buttons-container > button {
+  width: fit-content;
+  color: white;
+}

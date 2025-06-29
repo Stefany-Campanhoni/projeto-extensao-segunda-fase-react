@@ -1,0 +1,45 @@
+.table-container {
+  width: 100%;
+  display: table;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: center;
+}
+
+.table-header tr {
+  background-color: #a8a3ff;
+  border-bottom: 2px solid #ddd;
+}
+
+.table-header-cell {
+  padding: 10px 14px;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid rgba(137, 131, 255, 0.2);
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  text-transform: capitalize;
+}
+
+.table-header-cell:last-child {
+  border-right: none;
+}
+
+.table-cell {
+  padding: 8px 14px;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid rgba(221, 221, 221, 0.2);
+  color: #333;
+}
+
+.table-cell:last-child {
+  border-right: none;
+}
+
+.table-row:hover {
+  background-color: #f1f9ff;
+}
+
+.table-row.inactive {
+  background-color: rgba(223, 223, 223, 0.2);
+  color: #bbb;
+}

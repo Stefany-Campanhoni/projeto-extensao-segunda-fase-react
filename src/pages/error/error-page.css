@@ -1,0 +1,15 @@
+.error-container {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.error-container h2 {
+  color: #e53e3e;
+  margin-bottom: 16px;
+}
+
+.error-message {
+  color: #666;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
