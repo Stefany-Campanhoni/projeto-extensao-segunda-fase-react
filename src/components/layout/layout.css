@@ -1,4 +1,7 @@
 .app-layout {
   min-height: 100vh;
-  background-color: #fcf0f2;
+  /*background-image: url("@assets/backg.png");*/
+  background-size: cover;
+  background-repeat: no-repeat; 
+  background-position: center; 
 }

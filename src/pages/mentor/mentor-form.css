@@ -5,17 +5,17 @@
   width: 100%;
 }
 
-.form>label {
+.form > label {
   display: flex;
   flex-direction: column;
   width: 100%;
   font-size: 14px;
   gap: 10px;
-  color: #333;
+  color: white;
 }
 
-.form>label>input,
-.form>label>textarea {
+.form > label > input,
+.form > label > textarea {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -42,4 +42,14 @@ select {
   display: flex;
   flex-direction: row;
   justify-content: end;
+}
+
+.form label {
+  color: white;
+}
+
+.error-message {
+  color: white;
+  font-size: 15px;
+  margin-top: 4px;
 }

@@ -4,6 +4,10 @@
 }
 
 body {
+  background-image: url("/src/assets/backg.png");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-attachment: fixed;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
 

@@ -1,9 +1,8 @@
 .topbar {
-  background-image: linear-gradient(to right, #bcacd4, #bcacd4);
-  color: #222221;
+  background-image: transparent;
+  color: #ffffff;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: left;
@@ -13,14 +12,14 @@
 
 .topbar > img {
   position: absolute;
-  left: 0px;
-  width: 100px;
-  height: 100px;
+  left: 20px;
+  width: 200px;
+  height: 70px;
 }
 
 .topbar > h1 {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: arial;
   width: 100%;
 }
 
@@ -39,9 +38,18 @@
 
 .topbar > button:hover {
   opacity: .8;
-  border: 2px solid #222221;
+  border: 2px solid #986ff7;
 }
 
 .topbar > button:hover .header-icon {
-  color: #222221;
+  color: #986ff7;
+}
+.tagline {
+  font-weight: 700;
+  text-align: center;
+  font-size: 25px;
+  font-style: arial;
+  color: rgb(255, 255, 255);
+  padding-bottom: 30px;
+  margin: 10px 0 20px;
 }
