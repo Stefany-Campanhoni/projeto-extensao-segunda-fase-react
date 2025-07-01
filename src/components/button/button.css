@@ -1,7 +1,7 @@
 .button {
   min-width: 130px;
   padding: 8px 12px;
-  border: 2px solid #bcacd4;
+  border: 2px solid #a48fc4;
   border-radius: 8px;
   background-color: white;
   color: #333;
@@ -20,7 +20,7 @@
   background-color: #bcacd4;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(188, 172, 212, 0.3);
+  box-shadow: 0 4px 12px rgba(175, 122, 255, 0.3);
 }
 
 .button:active {
@@ -29,20 +29,20 @@
 
 .button--primary {
   background-color: white;
-  color: #ecb62d;
-  border-color: #ecb62d;
+  color: #1a7ff3;
+  border-color: #1a7ff3;
 }
 
 .button--primary:hover {
-  background-color: #ecb62d;
-  border-color: #ecb62d;
+  background-color: #1a7ff3;
+  border-color: #1a7ff3;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(236, 182, 45, 0.3);
+  box-shadow: 0 4px 12px #380077);
 }
 
 .button--edit {
-  background-color: white;
+  background-color: #ffffff;
   color: #007bff;
   border-color: #007bff;
 }
@@ -70,15 +70,15 @@
 }
 
 .button--danger {
-  background-color: white;
-  color: #ff0000;
-  border-color: #ff0000;
+  background-color: rgb(255, 255, 255);
+  color: rgba(78, 0, 151, 0.9);
+  border-color: rgba(78, 0, 151, 0.9);
 }
 
 .button--danger:hover {
-  background-color: #ff0000;
-  border-color: #ff0000;
+  background-color: rgba(78, 0, 151, 0.9);
+  border-color: rgba(78, 0, 151, 0.9);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(47, 0, 92, 0.9);
 }

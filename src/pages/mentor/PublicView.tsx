@@ -21,6 +21,7 @@ export function PublicView() {
       title="Banco de Mentores"
       headerClass="public-view-header"
     >
+      <p className="tagline">Toda jornada começa com uma boa orientação!</p>
       <Filter />
       <section className="cards-container">
         {mentors.map((mentor) => (
