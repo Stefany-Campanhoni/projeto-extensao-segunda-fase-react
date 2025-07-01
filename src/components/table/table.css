@@ -15,8 +15,8 @@
   padding: 10px 14px;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid rgba(137, 131, 255, 0.2);
-  font-weight: 500;
-  color: #555;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
   text-transform: capitalize;
 }
 
@@ -27,8 +27,8 @@
 .table-cell {
   padding: 8px 14px;
   border-bottom: 1px solid #ddd;
-  border-right: 1px solid rgba(221, 221, 221, 0.2);
-  color: #333;
+  border-right: 1px solid rgba(255, 254, 254, 0.2);
+  color: #fff;
 }
 
 .table-cell:last-child {
@@ -36,7 +36,7 @@
 }
 
 .table-row:hover {
-  background-color: #f1f9ff;
+  background-color: #bcb4be;
 }
 
 .table-row.inactive {

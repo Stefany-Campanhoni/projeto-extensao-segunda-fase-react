@@ -7,8 +7,10 @@
 }
 
 .filter-control {
+  display: flex;
   align-self: last baseline;
   margin-bottom: 20px;
+  gap: 10px;
 }
 
 .filter-control > button {

@@ -22,7 +22,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 14px;
-  background-color: #fff;
+  background-color: rgb(255, 250, 250);
   color: #111;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
