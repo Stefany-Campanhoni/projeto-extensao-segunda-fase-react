@@ -24,4 +24,6 @@ export type AuthState = {
 export type AuthContextType = AuthState & {
   login: (credentials: LoginRequest) => Promise<void>
   logout: () => void
+  setLastVisitedPage: (path: string) => void
+  getLastVisitedPage: () => string | null
 }

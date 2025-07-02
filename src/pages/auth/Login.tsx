@@ -45,8 +45,11 @@ export function Login() {
     try {
       await login(data)
 
-      const from = (location.state as any)?.from?.pathname || "/dashboard"
-      navigate(from, { replace: true })
+      const fromState = (location.state as any)?.from?.pathname
+      const lastVisited = localStorage.getItem("last_visited_page")
+      const redirectTo = fromState || lastVisited || "/dashboard"
+
+      navigate(redirectTo, { replace: true })
     } catch (error) {
       console.error("Error during login:", error)
       setLoginError("Email ou senha inválidos. Tente novamente.")

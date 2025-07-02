@@ -6,6 +6,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 const AUTH_STORAGE_KEY = "auth_user"
 const TOKEN_STORAGE_KEY = "auth_token"
+const LAST_VISITED_KEY = "last_visited_page"
 
 type AuthProviderProps = {
   children: ReactNode
@@ -25,8 +26,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (storedUser && storedToken) {
       try {
         const user: MentorResponse = JSON.parse(storedUser)
+        // Ensure the token from localStorage is used
+        const userWithToken = { ...user, token: storedToken }
         setAuthState({
-          user,
+          user: userWithToken,
           isAuthenticated: true,
           isLoading: false,
         })
@@ -62,6 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = (): void => {
     localStorage.removeItem(AUTH_STORAGE_KEY)
     localStorage.removeItem(TOKEN_STORAGE_KEY)
+    localStorage.removeItem(LAST_VISITED_KEY)
 
     setAuthState({
       user: null,
@@ -70,10 +74,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
   }
 
+  const setLastVisitedPage = (path: string): void => {
+    if (path !== "/login" && path !== "/" && !path.startsWith("/login")) {
+      localStorage.setItem(LAST_VISITED_KEY, path)
+    }
+  }
+
+  const getLastVisitedPage = (): string | null => {
+    return localStorage.getItem(LAST_VISITED_KEY)
+  }
+
   const value: AuthContextType = {
     ...authState,
     login,
     logout,
+    setLastVisitedPage,
+    getLastVisitedPage,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -60,7 +60,7 @@ type PublicRouteProps = {
 }
 
 export function PublicRoute({ children }: PublicRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading, getLastVisitedPage } = useAuth()
   const location = useLocation()
 
   if (isLoading) {
@@ -79,10 +79,13 @@ export function PublicRoute({ children }: PublicRouteProps) {
   }
 
   if (isAuthenticated && location.pathname === "/login") {
-    const from = (location.state as any)?.from?.pathname || "/dashboard"
+    const fromState = (location.state as any)?.from?.pathname
+    const lastVisited = getLastVisitedPage()
+    const redirectTo = fromState || lastVisited || "/dashboard"
+
     return (
       <Navigate
-        to={from}
+        to={redirectTo}
         replace
       />
     )

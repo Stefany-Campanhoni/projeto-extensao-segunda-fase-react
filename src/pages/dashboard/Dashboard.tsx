@@ -1,16 +1,19 @@
-import { getAll, remove } from "@api/mentor.api"
+import { getAll } from "@api/mentor.api"
+import { removeMentor } from "@api/mentor.auth.api"
 import { Button } from "@components/button/Button"
 import { DeleteModal } from "@components/modal/DeleteModal"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
 import { Column, Mentor } from "@custom-types/types"
 import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { useAuthenticatedApi } from "@security/hooks/useAuthenticatedApi"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./dashboard.css"
 
 export function Dashboard() {
   const navigate = useNavigate()
+  const authenticatedApi = useAuthenticatedApi()
   const [mentors, setMentors] = useState<Mentor[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [mentorIdToDelete, setMentorIdToDelete] = useState<number | undefined>()
@@ -22,7 +25,7 @@ export function Dashboard() {
 
   async function deleteMentor() {
     if (mentorIdToDelete) {
-      await remove(mentorIdToDelete)
+      await removeMentor(mentorIdToDelete, authenticatedApi)
       setMentors(mentors.filter((mentor) => mentor.id !== mentorIdToDelete))
     }
   }

@@ -1,17 +1,14 @@
-import {
-  create,
-  getById,
-  getCities,
-  getSpecialtiesByType,
-  getSpecialtyTypes,
-  update,
-} from "@api/mentor.api"
+import { create, getCities, getSpecialtiesByType, getSpecialtyTypes } from "@api/mentor.api"
+import { getMentorById, updateMentor } from "@api/mentor.auth.api"
 import { Button } from "@components/button/Button"
 import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
 import { City, MentorPayload, Specialty } from "@custom-types/mentor.types"
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useAuth } from "@security/contexts/AuthContext"
+import { useAuthenticatedApi } from "@security/hooks/useAuthenticatedApi"
+import { Role } from "@security/types/auth.types"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom"
@@ -72,6 +69,19 @@ export function MentorForm() {
   const navigate = useNavigate()
   const { id } = useParams()
   const isEditing = !!id
+  const authenticatedApi = useAuthenticatedApi()
+  const { user } = useAuth()
+
+  // Authorization check for editing - only allow users to edit their own profile or admins to edit any profile
+  useEffect(() => {
+    if (isEditing && user) {
+      const mentorId = Number.parseInt(id!)
+      if (user.role !== Role.ADMIN && user.id !== mentorId) {
+        navigate("/public") // Redirect unauthorized users
+        return
+      }
+    }
+  }, [isEditing, user, id, navigate])
 
   const {
     register,
@@ -96,7 +106,7 @@ export function MentorForm() {
   useEffect(() => {
     if (!id) return
     ;(async () => {
-      const mentorData = await getById(Number.parseInt(id))
+      const mentorData = await getMentorById(Number.parseInt(id), authenticatedApi)
 
       setValue("name", mentorData.name)
       setValue("email", mentorData.email)
@@ -110,7 +120,7 @@ export function MentorForm() {
       const specialtiesForType = await getSpecialtiesByType(mentorData.specialty.type)
       setSpecialties(specialtiesForType)
     })()
-  }, [id, setValue])
+  }, [id, setValue, authenticatedApi]) // Now authenticatedApi is stable
 
   useEffect(() => {
     ;(async () => {
@@ -130,7 +140,7 @@ export function MentorForm() {
     try {
       if (isEditing) {
         const { password, ...updateData } = data
-        await update(Number.parseInt(id!), updateData as MentorPayload)
+        await updateMentor(Number.parseInt(id!), updateData as MentorPayload, authenticatedApi)
       } else {
         await create(data as MentorPayload)
       }
@@ -198,12 +208,12 @@ export function MentorForm() {
           <select
             id="cityId"
             className={`input-element ${errors.cityId ? "input-error" : ""}`}
+            defaultValue=""
             {...register("cityId")}
           >
             <option
               value=""
               disabled
-              selected
               hidden
             >
               Selecione uma cidade
@@ -231,12 +241,12 @@ export function MentorForm() {
           <select
             id="specialtyTypeId"
             className={`input-element ${errors.specialtyType ? "input-error" : ""}`}
+            defaultValue=""
             {...register("specialtyType")}
           >
             <option
               value=""
               disabled
-              selected
               hidden
             >
               Selecione em qual área sua especialidade se encaixa
@@ -267,12 +277,12 @@ export function MentorForm() {
             <select
               id="specialtyId"
               className={`input-element ${errors.specialtyId ? "input-error" : ""}`}
+              defaultValue=""
               {...register("specialtyId")}
             >
               <option
                 value=""
                 disabled
-                selected
                 hidden
               >
                 Selecione sua especialidade

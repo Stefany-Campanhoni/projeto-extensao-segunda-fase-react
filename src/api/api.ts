@@ -43,7 +43,12 @@ async function fetchData<TResponse, TBody = unknown>(
       body: body ? JSON.stringify(body) : undefined,
     })
 
-    if (!response.ok) throw new Error("Network response was not ok")
+    if (!response.ok) {
+      const errorMessage = `HTTP ${response.status}: ${response.statusText}`
+      const error = new Error(errorMessage) as Error & { status: number }
+      error.status = response.status
+      throw error
+    }
 
     if (response.status === 204) return undefined as TResponse
 

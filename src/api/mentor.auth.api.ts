@@ -1,5 +1,14 @@
 import { Mentor, MentorPayload } from "@custom-types/mentor.types"
 
+export async function getMentorById(
+  id: number,
+  authenticatedApi: {
+    get: <TResponse>(uri: string) => Promise<TResponse>
+  },
+): Promise<Mentor> {
+  return authenticatedApi.get<Mentor>(`/mentors/${id}`)
+}
+
 export async function updateMentor(
   id: number,
   mentor: MentorPayload,

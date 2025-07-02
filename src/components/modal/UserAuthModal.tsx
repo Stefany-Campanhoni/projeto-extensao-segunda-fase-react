@@ -3,6 +3,7 @@ import {
   faSignInAlt,
   faSignOutAlt,
   faTachometerAlt,
+  faUserEdit,
   faUserPlus,
   faX,
 } from "@fortawesome/free-solid-svg-icons"
@@ -18,6 +19,7 @@ type UserAuthModalProps = {
   onRegister: () => void
   onLogout?: () => void
   onDashboard?: () => void
+  onEditProfile?: () => void
 }
 
 export function UserAuthModal({
@@ -26,6 +28,7 @@ export function UserAuthModal({
   onRegister,
   onLogout,
   onDashboard,
+  onEditProfile,
 }: UserAuthModalProps) {
   const { isAuthenticated, user } = useAuth()
 
@@ -104,6 +107,15 @@ export function UserAuthModal({
                   Dashboard
                 </Button>
               )}
+
+              <Button
+                onClick={onEditProfile}
+                icon={faUserEdit}
+                aria-label="Editar perfil"
+                className="auth-button"
+              >
+                Editar Perfil
+              </Button>
 
               <Button
                 onClick={onLogout}
