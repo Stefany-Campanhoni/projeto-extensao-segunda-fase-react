@@ -9,7 +9,7 @@ export function useAuthenticatedApi() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
 
-  const getAuthHeaders = useCallback((): HeadersInit => {
+  const getAuthHeaders = useCallback((): Record<string, string> => {
     const token = user?.token || localStorage.getItem(TOKEN_STORAGE_KEY)
     if (token) {
       console.debug("Using authentication token for API request")
@@ -22,7 +22,7 @@ export function useAuthenticatedApi() {
   }, [user?.token])
 
   const handleUnauthorized = useCallback(
-    (error: any) => {
+    (error: Error & { status?: number }) => {
       // Check for various forms of unauthorized errors
       if (
         error.message?.includes("401") ||
@@ -46,7 +46,7 @@ export function useAuthenticatedApi() {
       try {
         return await get<TResponse>(uri, getAuthHeaders())
       } catch (error) {
-        handleUnauthorized(error)
+        handleUnauthorized(error as Error & { status?: number })
         throw error
       }
     },
@@ -58,7 +58,7 @@ export function useAuthenticatedApi() {
       try {
         return await post<TResponse, TBody>(uri, body, getAuthHeaders())
       } catch (error) {
-        handleUnauthorized(error)
+        handleUnauthorized(error as Error & { status?: number })
         throw error
       }
     },
@@ -70,7 +70,7 @@ export function useAuthenticatedApi() {
       try {
         return await put<TResponse, TBody>(uri, body, getAuthHeaders())
       } catch (error) {
-        handleUnauthorized(error)
+        handleUnauthorized(error as Error & { status?: number })
         throw error
       }
     },
@@ -82,7 +82,7 @@ export function useAuthenticatedApi() {
       try {
         return await del<TResponse>(uri, getAuthHeaders())
       } catch (error) {
-        handleUnauthorized(error)
+        handleUnauthorized(error as Error & { status?: number })
         throw error
       }
     },
@@ -96,6 +96,6 @@ export function useAuthenticatedApi() {
       put: authenticatedPut,
       delete: authenticatedDelete,
     }),
-    [user?.token],
-  ) // Only re-create when the token changes
+    [authenticatedGet, authenticatedPost, authenticatedPut, authenticatedDelete],
+  )
 }

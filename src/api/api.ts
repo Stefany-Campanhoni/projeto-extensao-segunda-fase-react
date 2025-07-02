@@ -1,60 +1,93 @@
+import axios, { AxiosError, AxiosRequestConfig } from "axios"
+
 const BASE_PATH = "http://localhost:8080"
 
-export async function get<TResponse>(uri: string, headers: HeadersInit = {}): Promise<TResponse> {
-  return await fetchData<TResponse>(uri, "GET", undefined, headers)
+// Create axios instance with base configuration
+const apiClient = axios.create({
+  baseURL: BASE_PATH,
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
+
+export async function get<TResponse>(
+  uri: string,
+  headers: Record<string, string> = {},
+): Promise<TResponse> {
+  try {
+    const config: AxiosRequestConfig = {
+      headers,
+    }
+    const response = await apiClient.get<TResponse>(uri, config)
+    return response.data
+  } catch (error) {
+    handleAxiosError(error)
+    throw error
+  }
 }
 
 export async function post<TResponse, TBody = TResponse>(
   uri: string,
   body: TBody,
-  headers: HeadersInit = {},
+  headers: Record<string, string> = {},
 ): Promise<TResponse> {
-  return await fetchData<TResponse, TBody>(uri, "POST", body, headers)
+  try {
+    const config: AxiosRequestConfig = {
+      headers,
+    }
+    const response = await apiClient.post<TResponse>(uri, body, config)
+    return response.data
+  } catch (error) {
+    handleAxiosError(error)
+    throw error
+  }
 }
 
 export async function put<TResponse, TBody = TResponse>(
   uri: string,
   body: TBody,
-  headers: HeadersInit = {},
+  headers: Record<string, string> = {},
 ): Promise<TResponse> {
-  return await fetchData<TResponse, TBody>(uri, "PUT", body, headers)
+  try {
+    const config: AxiosRequestConfig = {
+      headers,
+    }
+    const response = await apiClient.put<TResponse>(uri, body, config)
+    return response.data
+  } catch (error) {
+    handleAxiosError(error)
+    throw error
+  }
 }
 
 export async function del<TResponse = void>(
   uri: string,
-  headers: HeadersInit = {},
-): Promise<TResponse> {
-  return await fetchData<TResponse>(uri, "DELETE", undefined, headers)
-}
-
-async function fetchData<TResponse, TBody = unknown>(
-  uri: string,
-  method: string,
-  body?: TBody,
-  headers: HeadersInit = {},
+  headers: Record<string, string> = {},
 ): Promise<TResponse> {
   try {
-    const response = await fetch(BASE_PATH + uri, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        ...headers,
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    })
-
-    if (!response.ok) {
-      const errorMessage = `HTTP ${response.status}: ${response.statusText}`
-      const error = new Error(errorMessage) as Error & { status: number }
-      error.status = response.status
-      throw error
+    const config: AxiosRequestConfig = {
+      headers,
     }
+    const response = await apiClient.delete<TResponse>(uri, config)
+    return response.data
+  } catch (error) {
+    handleAxiosError(error)
+    throw error
+  }
+}
 
-    if (response.status === 204) return undefined as TResponse
+function handleAxiosError(error: unknown): void {
+  if (axios.isAxiosError(error)) {
+    const axiosError = error as AxiosError
+    const status = axiosError.response?.status
+    const statusText = axiosError.response?.statusText || "Unknown Error"
+    const errorMessage = `HTTP ${status}: ${statusText}`
 
-    return response.json()
-  } catch (error: unknown) {
+    const customError = new Error(errorMessage) as Error & { status: number }
+    customError.status = status || 0
+    throw customError
+  } else {
     const errorMessage = error instanceof Error ? error.message : String(error)
-    throw new Error("Fetch error: " + errorMessage)
+    throw new Error("API error: " + errorMessage)
   }
 }
