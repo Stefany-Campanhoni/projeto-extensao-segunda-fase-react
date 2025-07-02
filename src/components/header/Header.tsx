@@ -20,7 +20,6 @@ export function Header({ title, className }: HeaderProps) {
   const { isAuthenticated, user } = useAuth()
   const logout = useLogout()
 
-  // Hide user button on login and registration pages
   const hideUserButton = location.pathname === "/login" || location.pathname === "/mentors/create"
 
   const handleUserButtonClick = () => {

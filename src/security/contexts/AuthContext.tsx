@@ -26,7 +26,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (storedUser && storedToken) {
       try {
         const user: MentorResponse = JSON.parse(storedUser)
-        // Ensure the token from localStorage is used
         const userWithToken = { ...user, token: storedToken }
         setAuthState({
           user: userWithToken,

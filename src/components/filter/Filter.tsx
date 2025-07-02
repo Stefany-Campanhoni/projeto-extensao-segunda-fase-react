@@ -3,7 +3,7 @@ import { Button } from "@components/button/Button"
 import { useState } from "react"
 import "./filter.css"
 
-interface FilterProps {
+type FilterProps = {
   onFilter: (filters: FilterParams) => void
   onClearFilters: () => void
 }
@@ -23,7 +23,6 @@ export function Filter({ onFilter, onClearFilters }: FilterProps) {
   }
 
   const handleFilter = () => {
-    // Only pass non-empty values
     const activeFilters: FilterParams = {}
     if (filters.name?.trim()) activeFilters.name = filters.name.trim()
     if (filters.cityName?.trim()) activeFilters.cityName = filters.cityName.trim()

@@ -72,12 +72,11 @@ export function MentorForm() {
   const authenticatedApi = useAuthenticatedApi()
   const { user } = useAuth()
 
-  // Authorization check for editing - only allow users to edit their own profile or admins to edit any profile
   useEffect(() => {
     if (isEditing && user) {
       const mentorId = Number.parseInt(id!)
       if (user.role !== Role.ADMIN && user.id !== mentorId) {
-        navigate("/public") // Redirect unauthorized users
+        navigate("/public")
         return
       }
     }
@@ -120,7 +119,7 @@ export function MentorForm() {
       const specialtiesForType = await getSpecialtiesByType(mentorData.specialty.type)
       setSpecialties(specialtiesForType)
     })()
-  }, [id, setValue, authenticatedApi]) // Now authenticatedApi is stable
+  }, [id, setValue, authenticatedApi])
 
   useEffect(() => {
     ;(async () => {

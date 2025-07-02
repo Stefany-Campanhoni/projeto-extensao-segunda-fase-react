@@ -6,7 +6,7 @@ export function getAll(): Promise<Mentor[]> {
   return get<Mentor[]>("/mentors")
 }
 
-export interface FilterParams {
+export type FilterParams = {
   name?: string
   cityName?: string
   specialtyType?: string
