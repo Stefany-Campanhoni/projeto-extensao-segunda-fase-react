@@ -2,7 +2,6 @@ import logo from "@assets/logo.png"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useAuth } from "@security/contexts/AuthContext"
-import { useLogout } from "@security/hooks/useLogout"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { UserAuthModal } from "../modal/UserAuthModal"
@@ -17,17 +16,12 @@ export function Header({ title, className }: HeaderProps) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const { isAuthenticated, user } = useAuth()
-  const logout = useLogout()
+  const { user, logout } = useAuth()
 
   const hideUserButton = location.pathname === "/login" || location.pathname === "/mentors/create"
 
   const handleUserButtonClick = () => {
-    if (isAuthenticated) {
-      setIsAuthModalOpen(true)
-    } else {
-      setIsAuthModalOpen(true)
-    }
+    setIsAuthModalOpen(true)
   }
 
   const handleCloseModal = () => {
@@ -46,6 +40,7 @@ export function Header({ title, className }: HeaderProps) {
 
   const handleLogout = () => {
     logout()
+    navigate("/public")
     setIsAuthModalOpen(false)
   }
 

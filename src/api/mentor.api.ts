@@ -1,10 +1,20 @@
 import { City, Mentor, MentorPayload, Specialty } from "@custom-types/mentor.types"
-import { del, get, post, put } from "./api"
+import { MentorResponse } from "@security/types/auth.types"
+import { apiDelete, apiGet, apiPost, apiPut } from "./api"
 
-// Public endpoints (no authentication required)
-export function getAll(): Promise<Mentor[]> {
-  return get<Mentor[]>("/mentors")
-}
+// Auth
+export const login = (credentials: { email: string; password: string }): Promise<MentorResponse> =>
+  apiPost<MentorResponse>("/mentors/login", credentials)
+
+// Public endpoints
+export const getAllMentors = (): Promise<Mentor[]> => apiGet<Mentor[]>("/mentors")
+
+export const getCities = (): Promise<City[]> => apiGet<City[]>("/cities")
+
+export const getSpecialtyTypes = (): Promise<string[]> => apiGet<string[]>("/specialties/types")
+
+export const getSpecialtiesByType = (type: string): Promise<Specialty[]> =>
+  apiGet<Specialty[]>(`/specialties?${new URLSearchParams({ type })}`)
 
 export type FilterParams = {
   name?: string
@@ -12,60 +22,27 @@ export type FilterParams = {
   specialtyType?: string
 }
 
-export function filterMentors(filters: FilterParams): Promise<Mentor[]> {
+export const filterMentors = (filters: FilterParams): Promise<Mentor[]> => {
   const params = new URLSearchParams()
-
   if (filters.name) params.append("name", filters.name)
   if (filters.cityName) params.append("cityName", filters.cityName)
   if (filters.specialtyType) params.append("specialtyType", filters.specialtyType)
 
   const queryString = params.toString()
   const url = queryString ? `/mentors/filter?${queryString}` : "/mentors/filter"
-
-  return get<Mentor[]>(url)
+  return apiGet<Mentor[]>(url)
 }
 
-/**
- * @deprecated This endpoint is now protected. Use getMentorById from mentor.auth.api.ts instead
- */
-export function getById(id: number): Promise<Mentor> {
-  console.warn(
-    "Using deprecated getById function. This endpoint is now protected. Use getMentorById from mentor.auth.api.ts instead",
-  )
-  return get<Mentor>(`/mentors/${id}`)
-}
+// Public mentor creation
+export const createMentor = (mentor: MentorPayload): Promise<Mentor> =>
+  apiPost<Mentor>("/mentors", mentor)
 
-export function create(mentor: MentorPayload): Promise<Mentor> {
-  return post<Mentor, MentorPayload>("/mentors", mentor)
-}
+// Protected endpoints (require token)
+export const getMentorById = (id: number, token: string): Promise<Mentor> =>
+  apiGet<Mentor>(`/mentors/${id}`, token)
 
-// Note: update and remove operations should use mentor.auth.api.ts
-// These functions are kept for backward compatibility but deprecated
-/**
- * @deprecated Use updateMentor from mentor.auth.api.ts instead
- */
-export function update(id: number, mentor: MentorPayload): Promise<Mentor> {
-  console.warn("Using deprecated update function. Use updateMentor from mentor.auth.api.ts instead")
-  return put<Mentor, MentorPayload>(`/mentors/${id}`, mentor)
-}
+export const updateMentor = (id: number, mentor: MentorPayload, token: string): Promise<Mentor> =>
+  apiPut<Mentor>(`/mentors/${id}`, mentor, token)
 
-/**
- * @deprecated Use removeMentor from mentor.auth.api.ts instead
- */
-export function remove(id: number): Promise<void> {
-  console.warn("Using deprecated remove function. Use removeMentor from mentor.auth.api.ts instead")
-  return del<void>(`/mentors/${id}`)
-}
-
-// Public reference data endpoints
-export function getCities(): Promise<City[]> {
-  return get<City[]>("/cities")
-}
-
-export function getSpecialtyTypes(): Promise<string[]> {
-  return get<string[]>("/specialties/types")
-}
-
-export function getSpecialtiesByType(type: string): Promise<Specialty[]> {
-  return get<Specialty[]>("/specialties?" + new URLSearchParams({ type: type }).toString())
-}
+export const deleteMentor = (id: number, token: string): Promise<void> =>
+  apiDelete<void>(`/mentors/${id}`, token)

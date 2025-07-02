@@ -1,5 +1,11 @@
-import { create, getCities, getSpecialtiesByType, getSpecialtyTypes } from "@api/mentor.api"
-import { getMentorById, updateMentor } from "@api/mentor.auth.api"
+import {
+  createMentor,
+  getCities,
+  getMentorById,
+  getSpecialtiesByType,
+  getSpecialtyTypes,
+  updateMentor,
+} from "@api/api"
 import { Button } from "@components/button/Button"
 import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
@@ -7,7 +13,6 @@ import { City, MentorPayload, Specialty } from "@custom-types/mentor.types"
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAuth } from "@security/contexts/AuthContext"
-import { useAuthenticatedApi } from "@security/hooks/useAuthenticatedApi"
 import { Role } from "@security/types/auth.types"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -69,7 +74,6 @@ export function MentorForm() {
   const navigate = useNavigate()
   const { id } = useParams()
   const isEditing = !!id
-  const authenticatedApi = useAuthenticatedApi()
   const { user } = useAuth()
 
   useEffect(() => {
@@ -99,34 +103,54 @@ export function MentorForm() {
   const specialtyType = watch("specialtyType")
 
   useEffect(() => {
-    populateBaseSelect()
+    const loadInitialData = async () => {
+      populateBaseSelect()
+    }
+
+    loadInitialData()
   }, [])
 
   useEffect(() => {
     if (!id) return
-    ;(async () => {
-      const mentorData = await getMentorById(Number.parseInt(id), authenticatedApi)
 
-      setValue("name", mentorData.name)
-      setValue("email", mentorData.email)
-      setValue("description", mentorData.description)
-      setValue("cityId", mentorData.city.id)
-      setValue("specialtyType", mentorData.specialty.type)
-      setValue("specialtyId", mentorData.specialty.id)
+    const loadMentorData = async () => {
+      if (!user?.token) return
 
-      await populateBaseSelect()
+      try {
+        const mentorData = await getMentorById(Number.parseInt(id), user.token)
 
-      const specialtiesForType = await getSpecialtiesByType(mentorData.specialty.type)
-      setSpecialties(specialtiesForType)
-    })()
-  }, [id, setValue, authenticatedApi])
+        setValue("name", mentorData.name)
+        setValue("email", mentorData.email)
+        setValue("description", mentorData.description)
+        setValue("cityId", mentorData.city.id)
+        setValue("specialtyType", mentorData.specialty.type)
+        setValue("specialtyId", mentorData.specialty.id)
+
+        await populateBaseSelect()
+
+        const specialtiesForType = await getSpecialtiesByType(mentorData.specialty.type)
+        setSpecialties(specialtiesForType)
+      } catch (error) {
+        console.error("Error loading mentor data:", error)
+      }
+    }
+
+    loadMentorData()
+  }, [id, setValue, user?.token])
 
   useEffect(() => {
-    ;(async () => {
+    const loadSpecialties = async () => {
       if (specialtyType) {
-        setSpecialties(await getSpecialtiesByType(specialtyType))
+        try {
+          const specialtiesData = await getSpecialtiesByType(specialtyType)
+          setSpecialties(specialtiesData)
+        } catch (error) {
+          console.error("Error loading specialties:", error)
+        }
       }
-    })()
+    }
+
+    loadSpecialties()
   }, [specialtyType])
 
   async function populateBaseSelect() {
@@ -138,10 +162,11 @@ export function MentorForm() {
   async function onSubmit(data: CreateMentorFormData) {
     try {
       if (isEditing) {
+        if (!user?.token) return
         const { password, ...updateData } = data
-        await updateMentor(Number.parseInt(id!), updateData as MentorPayload, authenticatedApi)
+        await updateMentor(Number.parseInt(id!), updateData as MentorPayload, user.token)
       } else {
-        await create(data as MentorPayload)
+        await createMentor(data as MentorPayload)
       }
       navigate("/")
     } catch (error) {

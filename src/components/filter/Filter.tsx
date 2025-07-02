@@ -1,4 +1,4 @@
-import { FilterParams } from "@api/mentor.api"
+import { FilterParams } from "@api/api"
 import { Button } from "@components/button/Button"
 import { useState } from "react"
 import "./filter.css"

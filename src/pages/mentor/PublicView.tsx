@@ -1,4 +1,4 @@
-import { filterMentors, FilterParams, getAll } from "@api/mentor.api"
+import { filterMentors, FilterParams, getAllMentors } from "@api/api"
 import { Page } from "@components/page/Page"
 import { Mentor } from "@custom-types/mentor.types"
 import { useEffect, useState } from "react"
@@ -14,7 +14,7 @@ export function PublicView() {
   const loadAllMentors = async () => {
     setLoading(true)
     try {
-      const data = await getAll()
+      const data = await getAllMentors()
       setMentors(data)
     } catch (error) {
       console.error("Error loading mentors:", error)

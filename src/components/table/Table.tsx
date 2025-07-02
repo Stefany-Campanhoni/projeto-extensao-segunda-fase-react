@@ -4,13 +4,18 @@ import "./table.css"
 type TableProps<T> = {
   columns: Column<T>[]
   rowsData: T[]
-  classNamed?: string
+  className?: string
   emptyText?: string
 }
 
-export function Table<T>({ columns, rowsData, classNamed, emptyText = "" }: TableProps<T>) {
+export function Table<T>({
+  columns,
+  rowsData,
+  className,
+  emptyText = "Nenhum item encontrado",
+}: TableProps<T>) {
   return (
-    <table className={`table-container ${classNamed || ""}`}>
+    <table className={`table-container ${className || ""}`}>
       <thead className="table-header">
         <tr>
           {columns.map((column) => (

@@ -1,19 +1,18 @@
-import { getAll } from "@api/mentor.api"
-import { removeMentor } from "@api/mentor.auth.api"
+import { deleteMentor, getAllMentors } from "@api/api"
 import { Button } from "@components/button/Button"
 import { DeleteModal } from "@components/modal/DeleteModal"
 import { Page } from "@components/page/Page"
 import { Table } from "@components/table/Table"
 import { Column, Mentor } from "@custom-types/types"
 import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons"
-import { useAuthenticatedApi } from "@security/hooks/useAuthenticatedApi"
+import { useAuth } from "@security/contexts/AuthContext"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./dashboard.css"
 
 export function Dashboard() {
   const navigate = useNavigate()
-  const authenticatedApi = useAuthenticatedApi()
+  const { user } = useAuth()
   const [mentors, setMentors] = useState<Mentor[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [mentorIdToDelete, setMentorIdToDelete] = useState<number | undefined>()
@@ -23,9 +22,9 @@ export function Dashboard() {
     setMentorIdToDelete(mentor?.id)
   }
 
-  async function deleteMentor() {
-    if (mentorIdToDelete) {
-      await removeMentor(mentorIdToDelete, authenticatedApi)
+  async function handleDeleteMentor() {
+    if (mentorIdToDelete && user?.token) {
+      await deleteMentor(mentorIdToDelete, user.token)
       setMentors(mentors.filter((mentor) => mentor.id !== mentorIdToDelete))
     }
   }
@@ -64,7 +63,6 @@ export function Dashboard() {
           <Button
             variant="edit"
             icon={faPen}
-            iconColor="white"
             onClick={() => navigate(`/mentors/${mentor.id}/edit`)}
             className="action-buttons"
           />
@@ -80,13 +78,16 @@ export function Dashboard() {
   ]
 
   useEffect(() => {
-    ;(async () => {
+    const loadMentors = async () => {
       try {
-        setMentors(await getAll())
+        const mentorData = await getAllMentors()
+        setMentors(mentorData)
       } catch (err) {
         console.error("Error while fetching mentors", err)
       }
-    })()
+    }
+
+    loadMentors()
   }, [])
 
   return (
@@ -111,7 +112,7 @@ export function Dashboard() {
       {isModalOpen && (
         <DeleteModal
           onClose={toggleModal}
-          onConfirmation={deleteMentor}
+          onConfirmation={handleDeleteMentor}
         />
       )}
     </>

@@ -5,9 +5,7 @@ import "./button.css"
 type ButtonProps = {
   children?: React.ReactNode
   variant?: "primary" | "edit" | "save" | "danger"
-  icon?: IconDefinition | null
-  iconColor?: string
-  iconWidth?: number
+  icon?: IconDefinition
   className?: string
   onClick?: () => void
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
@@ -16,8 +14,6 @@ export function Button({
   children,
   variant,
   icon,
-  iconColor = undefined,
-  iconWidth = 20,
   className = "",
   onClick,
   ...props
@@ -32,9 +28,7 @@ export function Button({
     >
       {icon && (
         <FontAwesomeIcon
-          width={iconWidth}
           icon={icon}
-          color={iconColor}
           className="icon"
         />
       )}

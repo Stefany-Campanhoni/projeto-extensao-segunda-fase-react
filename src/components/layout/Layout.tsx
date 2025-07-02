@@ -1,12 +1,17 @@
 import backg from "@assets/backg.png"
 import { LoadingSpinner } from "@components/loading/LoadingSpinner"
-import { useNavigationTracking } from "@security/hooks/useNavigationTracking"
-import { Suspense } from "react"
-import { Outlet } from "react-router-dom"
+import { useAuth } from "@security/contexts/AuthContext"
+import { Suspense, useEffect } from "react"
+import { Outlet, useLocation } from "react-router-dom"
 import "./layout.css"
 
 export function Layout() {
-  useNavigationTracking()
+  const location = useLocation()
+  const { setLastVisitedPage } = useAuth()
+
+  useEffect(() => {
+    setLastVisitedPage(location.pathname)
+  }, [location.pathname, setLastVisitedPage])
 
   return (
     <div
