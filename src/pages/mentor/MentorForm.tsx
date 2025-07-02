@@ -12,7 +12,7 @@ import { Page } from "@components/page/Page"
 import { City, MentorPayload, Specialty } from "@custom-types/mentor.types"
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAuth } from "@security/contexts/AuthContext"
+import { useAuth } from "@security/hooks/useAuth"
 import { Role } from "@security/types/auth.types"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -93,6 +93,7 @@ export function MentorForm() {
     setValue,
     formState: { errors },
   } = useForm<CreateMentorFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(isEditing ? (editMentorFormSchema as any) : createMentorFormSchema),
   })
 
@@ -163,12 +164,19 @@ export function MentorForm() {
     try {
       if (isEditing) {
         if (!user?.token) return
-        const { password, ...updateData } = data
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password: _password, ...updateData } = data
         await updateMentor(Number.parseInt(id!), updateData as MentorPayload, user.token)
       } else {
         await createMentor(data as MentorPayload)
       }
-      navigate("/")
+
+      // Navigate admin users back to dashboard, others to public view
+      if (user?.role === Role.ADMIN) {
+        navigate("/dashboard")
+      } else {
+        navigate("/")
+      }
     } catch (error) {
       console.error(`Error ${isEditing ? "updating" : "creating"} mentor:`, error)
     }
@@ -331,7 +339,7 @@ export function MentorForm() {
             type="button"
             variant="danger"
             icon={faXmark}
-            onClick={() => navigate("/")}
+            onClick={() => (user?.role === Role.ADMIN ? navigate("/dashboard") : navigate("/"))}
           >
             Cancelar
           </Button>

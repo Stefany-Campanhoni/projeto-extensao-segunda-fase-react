@@ -1,6 +1,6 @@
 import backg from "@assets/backg.png"
 import { LoadingSpinner } from "@components/loading/LoadingSpinner"
-import { useAuth } from "@security/contexts/AuthContext"
+import { useAuth } from "@security/hooks/useAuth"
 import { Suspense, useEffect } from "react"
 import { Outlet, useLocation } from "react-router-dom"
 import "./layout.css"

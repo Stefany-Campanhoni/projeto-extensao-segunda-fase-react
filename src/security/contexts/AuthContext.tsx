@@ -1,8 +1,7 @@
 import { login as loginApi, setLogoutCallback } from "@api/api"
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import type { AuthContextType, AuthState, LoginRequest, MentorResponse } from "../types/auth.types"
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+import { useEffect, useState, type ReactNode } from "react"
+import type { AuthState, LoginRequest, MentorResponse } from "../types/auth.types"
+import { AuthContext, type AuthContextType } from "./AuthContextDef"
 
 type AuthProviderProps = {
   children: ReactNode
@@ -78,12 +77,4 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-export function useAuth(): AuthContextType {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return context
 }

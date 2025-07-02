@@ -5,6 +5,7 @@ import "./input-field.css"
 type InputFieldProps = {
   label: string
   name: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register: UseFormRegister<any>
   error?: string
   type?: HTMLInputTypeAttribute | "textarea"

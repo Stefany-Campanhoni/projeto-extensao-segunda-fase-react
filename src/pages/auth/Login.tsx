@@ -3,7 +3,7 @@ import { InputField } from "@components/input/InputField"
 import { Page } from "@components/page/Page"
 import { faSignInAlt, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAuth } from "@security/contexts/AuthContext"
+import { useAuth } from "@security/hooks/useAuth"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -45,7 +45,7 @@ export function Login() {
     try {
       await login(data)
 
-      const fromState = (location.state as any)?.from?.pathname
+      const fromState = (location.state as { from?: { pathname: string } })?.from?.pathname
       const lastVisited = localStorage.getItem("last_visited_page")
       const redirectTo = fromState || lastVisited || "/dashboard"
 

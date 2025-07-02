@@ -75,7 +75,7 @@ export type FilterParams = {
   specialtyType?: string
 }
 
-export const filterMentors = (filters: FilterParams): Promise<Mentor[]> => {
+export const filterMentors = async (filters: FilterParams): Promise<Mentor[]> => {
   const params = new URLSearchParams()
   if (filters.name) params.append("name", filters.name)
   if (filters.cityName) params.append("cityName", filters.cityName)
@@ -83,7 +83,8 @@ export const filterMentors = (filters: FilterParams): Promise<Mentor[]> => {
 
   const queryString = params.toString()
   const url = queryString ? `/mentors/filter?${queryString}` : "/mentors/filter"
-  return api.get<Mentor[]>(url).then((res) => res.data)
+  const res = await api.get<Mentor[]>(url)
+  return res.data
 }
 
 export const createMentor = (mentor: MentorPayload): Promise<Mentor> =>

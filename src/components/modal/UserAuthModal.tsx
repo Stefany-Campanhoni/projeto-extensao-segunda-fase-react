@@ -5,12 +5,13 @@ import {
   faTachometerAlt,
   faUserEdit,
   faUserPlus,
+  faUsers,
   faX,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useAuth } from "@security/contexts/AuthContext"
+import { useAuth } from "@security/hooks/useAuth"
 import { Role } from "@security/types/auth.types"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import "./user-auth-modal.css"
 
 type UserAuthModalProps = {
@@ -20,6 +21,8 @@ type UserAuthModalProps = {
   onLogout?: () => void
   onDashboard?: () => void
   onEditProfile?: () => void
+  onPublicView?: () => void
+  currentPath?: string
 }
 
 export function UserAuthModal({
@@ -29,6 +32,8 @@ export function UserAuthModal({
   onLogout,
   onDashboard,
   onEditProfile,
+  onPublicView,
+  currentPath,
 }: UserAuthModalProps) {
   const { isAuthenticated, user } = useAuth()
 
@@ -38,11 +43,14 @@ export function UserAuthModal({
     }
   }
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      onClose()
-    }
-  }
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose()
+      }
+    },
+    [onClose],
+  )
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown)
@@ -52,7 +60,7 @@ export function UserAuthModal({
       document.removeEventListener("keydown", handleKeyDown)
       document.body.style.overflow = "unset"
     }
-  }, [])
+  }, [handleKeyDown])
 
   const handleLoginClick = () => {
     onLogin()
@@ -97,7 +105,7 @@ export function UserAuthModal({
         <div className="auth-options">
           {isAuthenticated ? (
             <>
-              {user?.role === Role.ADMIN && (
+              {user?.role === Role.ADMIN && currentPath !== "/dashboard" && (
                 <Button
                   onClick={onDashboard}
                   icon={faTachometerAlt}
@@ -105,6 +113,17 @@ export function UserAuthModal({
                   className="auth-button"
                 >
                   Dashboard
+                </Button>
+              )}
+
+              {currentPath !== "/public" && (
+                <Button
+                  onClick={onPublicView}
+                  icon={faUsers}
+                  aria-label="Ver nossos mentores"
+                  className="auth-button"
+                >
+                  Nossos Mentores
                 </Button>
               )}
 
@@ -129,6 +148,17 @@ export function UserAuthModal({
             </>
           ) : (
             <>
+              {currentPath !== "/public" && (
+                <Button
+                  onClick={onPublicView}
+                  icon={faUsers}
+                  aria-label="Ver nossos mentores"
+                  className="auth-button"
+                >
+                  Nossos Mentores
+                </Button>
+              )}
+
               <Button
                 onClick={handleLoginClick}
                 icon={faSignInAlt}

@@ -1,5 +1,5 @@
 import { LoadingSpinner } from "@components/loading/LoadingSpinner"
-import { useAuth } from "@security/contexts/AuthContext"
+import { useAuth } from "@security/hooks/useAuth"
 import { Role } from "@security/types/auth.types"
 import type { ReactNode } from "react"
 import { Navigate, useLocation } from "react-router-dom"
@@ -37,7 +37,7 @@ export function ProtectedRoute({
 
   // Handle public routes when user is authenticated (like login page)
   if (isPublicRoute && isAuthenticated && location.pathname === "/login") {
-    const fromState = (location.state as any)?.from?.pathname
+    const fromState = (location.state as { from?: { pathname: string } })?.from?.pathname
     const lastVisited = getLastVisitedPage()
     const redirectTo = fromState || lastVisited || "/dashboard"
     return (

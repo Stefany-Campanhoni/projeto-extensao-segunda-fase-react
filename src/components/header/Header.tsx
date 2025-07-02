@@ -1,7 +1,7 @@
 import logo from "@assets/logo.png"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useAuth } from "@security/contexts/AuthContext"
+import { useAuth } from "@security/hooks/useAuth"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { UserAuthModal } from "../modal/UserAuthModal"
@@ -56,6 +56,11 @@ export function Header({ title, className }: HeaderProps) {
     }
   }
 
+  const handlePublicView = () => {
+    navigate("/public")
+    setIsAuthModalOpen(false)
+  }
+
   return (
     <>
       <header className={`topbar ${className}`}>
@@ -86,6 +91,8 @@ export function Header({ title, className }: HeaderProps) {
           onLogout={handleLogout}
           onDashboard={handleDashboard}
           onEditProfile={handleEditProfile}
+          onPublicView={handlePublicView}
+          currentPath={location.pathname}
         />
       )}
     </>
