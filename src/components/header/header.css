@@ -21,7 +21,7 @@
   font-size: 24px;
   font-weight: arial;
   width: 100%;
-  color: #ffffff;
+  color: #000000;
 }
 
 .topbar > button {
@@ -29,12 +29,12 @@
   height: 51px;
   background-color: #00000000;
   border-radius: 50%;
-  border: 2px solid #f7f7f0;
+  border: 2px solid #3765fc;
   transition: ease-in-out 200ms;
 }
 
 .topbar > button > .header-icon {
-  color: #ffffff;
+  color: #3765fc;
   transition: ease-in-out 200ms;
 }
 
