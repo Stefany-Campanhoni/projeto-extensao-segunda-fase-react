@@ -63,8 +63,8 @@ export function Login() {
   }
 
   return (
-    <Page title="Login">
-      <div className="login-container">
+      <div className="login-layout">
+       <div className="login-container">
         <form
           className="login-form"
           onSubmit={handleSubmit(onSubmit)}
@@ -146,6 +146,7 @@ export function Login() {
           </div>
         </form>
       </div>
-    </Page>
+      </div>
+      
   )
 }
