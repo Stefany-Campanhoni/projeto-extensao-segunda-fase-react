@@ -26,7 +26,8 @@ export function PublicView() {
   const handleFilter = async (filters: FilterParams) => {
     setLoading(true)
     try {
-      const data = await filterMentors(filters)
+      let data = await filterMentors(filters)
+      data = data.filter(mentor => mentor.role !== "ADMIN") 
       setMentors(data)
     } catch (error) {
       console.error("Error filtering mentors:", error)

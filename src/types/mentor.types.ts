@@ -1,3 +1,5 @@
+import { Role } from "./types"
+
 export type City = {
   id: number
   name: string
@@ -15,6 +17,7 @@ export type Mentor = {
   name: string
   description: string
   email: string
+  role: Role
   city: City
   specialty: Specialty
 }
