@@ -192,7 +192,7 @@ O frontend integra com uma API REST que fornece:
 
 ## 🎨 Design System
 
-- **Cores**: Paleta suave com roxo (#bcacd4) e amarelo (#ecb62d)
+- **Cores**: Paleta suave com roxo e azul
 - **Tipografia**: Arial/Helvetica para legibilidade
 - **Componentes**: Sistema consistente de botões, inputs e cards
 - **Responsividade**: Design mobile-first
